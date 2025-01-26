@@ -1,3 +1,8 @@
+import datetime
+from itertools import count
+import random
+import string
+import time
 from flask import Blueprint
 from flask import flash
 from flask import g
@@ -6,11 +11,16 @@ from flask import render_template
 from flask import request
 from flask import url_for
 from werkzeug.exceptions import abort
+import pandas as pd
 
 from .auth import login_required
 from .db import get_db
+
 bp = Blueprint("invoice", __name__)
 #bp = Blueprint('invoice', __name__, url_prefix='/invoice')
+
+
+
 
 
 @bp.route("/")
@@ -21,11 +31,11 @@ def index():
         " FROM invoices p JOIN user u ON p.author_id = u.id"
         " ORDER BY created DESC"
     ).fetchall()
-    print(invoices)
     return render_template("invoice/index.html", invoices=invoices)
 
 
 def get_post(id ):
+
     post = (
         get_db()
         .execute(
@@ -48,6 +58,7 @@ def create():
         due_date = request.form.get('due_date')
         invoice_number = request.form.get('invoice_number')
         description = request.form.get('description')
+
         error = None
         if not client_name:
             error = "Title is required."
@@ -65,6 +76,8 @@ def create():
     return render_template("invoice/create.html")
 
 
+
+
 @bp.route("/<int:id>/update", methods=("GET", "POST"))
 @login_required
 def update(id):
@@ -75,18 +88,36 @@ def update(id):
         due_date = request.form.get('due_date')
         invoice_number = request.form.get('invoice_number')
         description = request.form.get('description')
-        error = None
         if not client_name:
-            error = "Title is required."
-        if error is not None:
-            flash(error)
+            flash = "Title is required."
         else:
+            invoices_dict = {
+                'client_name': client_name,
+                  'invoice_date': invoice_date,
+                    'due_date': due_date, 
+                    'invoice_number': invoice_number, 
+                    'description': description, 
+                    }
+            date_time = (time.strftime("%b-%d-%Y-%H-%M"))
+            md_filename = "flaskr/data/" + invoice_number + date_time + ".md"  # type: ignore
+            client_input = pd.DataFrame.from_dict(invoices_dict, orient='index')        
+            a = "---\n"
+            d = f"date: {date_time}\n"
+            e = f"{client_input.to_markdown()}\n"
+            a = "---\n"
+            file = open(f"{md_filename}","w")
+            L = [a, d, a, e] # type: ignore
+            file.writelines(L)
+            file.close()
+            print(invoices_dict)        
+            print(client_input)        
             db = get_db()
             db.execute(
                 "UPDATE invoices SET client_name = ?, description = ? WHERE id = ?", (client_name, description, id)
             )
             db.commit()
             return redirect(url_for("invoice.index"))
+
     return render_template("invoice/update.html", invoices=invoices)
 
 

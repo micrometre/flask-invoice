@@ -23,9 +23,8 @@
 
   <div>
     <label for="invoice_number">Invoice Number:</label>
-    <input type="text" id="invoice_number" name="invoice_number">
+    <input type="datetime-local"  id="invoice_number" name="invoice_number">
   </div>
-
   <div>
     <label for="description">Description:</label>
     <textarea id="description" name="description" rows="4" cols="50"></textarea>
@@ -36,5 +35,13 @@
   <button type="submit">Create Invoice</button>
 
 </form>
+
+<script>
+
+  let show = () => {
+    let input = document.getElementById("invoice_number");
+    alert("Value = " + input.value);
+  }
+</script>
 
 {% endblock %}
