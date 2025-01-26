@@ -12,6 +12,7 @@ from flask import request
 from flask import url_for
 from werkzeug.exceptions import abort
 import pandas as pd
+import subprocess
 
 from .auth import login_required
 from .db import get_db
@@ -100,6 +101,7 @@ def update(id):
                     }
             date_time = (time.strftime("%b-%d-%Y-%H-%M"))
             md_filename = "flaskr/data/" + invoice_number + date_time + ".md"  # type: ignore
+            pdf_filename = "flaskr/data/" + invoice_number + date_time + ".pdf"  # type: ignore
             client_input = pd.DataFrame.from_dict(invoices_dict, orient='index')        
             a = "---\n"
             d = f"date: {date_time}\n"
@@ -109,7 +111,11 @@ def update(id):
             L = [a, d, a, e] # type: ignore
             file.writelines(L)
             file.close()
-            print(invoices_dict)        
+            arg1 = md_filename
+            arg2 = "-o" 
+            arg3 = pdf_filename 
+            output = subprocess.check_output(['pandoc',str(arg1), str(arg2), str(arg3)])
+            print(output)        
             print(client_input)        
             db = get_db()
             db.execute(
