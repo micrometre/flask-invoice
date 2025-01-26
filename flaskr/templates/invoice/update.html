@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Edit "{{ invoices['id'] }}"{% endblock %}</h1>
+
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <div>
+      <label for="client_name">Client Name:</label>
+      <input type="text" id="client_name" name="client_name" value="{{ request.form['client_name'] or invoices['client_name'] }}" required>
+    </div>
+  
+    <div>
+      <label for="invoice_date">Invoice Date:</label>
+      <input type="date" id="invoice_date" name="invoice_date"value="{{request.form['invoice_date'] or invoices['invoice_date']}}" required>
+    </div>
+  
+    <div>
+      <label for="due_date">Due Date:</label>
+      <input type="date" id="due_date" name="due_date" value="{{ request.form['due_date'] or invoices['due_date'] }}" required>
+    </div>
+  
+    <div>
+      <label for="invoice_number">Invoice Number:</label>
+      <input type="text" id="invoice_number" name="invoice_number"value="{{ request.form['invoice_number'] or invoices['invoice_number'] }}">
+    </div>
+  
+    <div>
+      <label for="description">Description:</label>
+      <textarea id="description" name="description" rows="4" cols="50" >{{ request.form['description'] or invoices['description'] }}</textarea>
+    </div>
+  
+  
+  
+    <button type="submit">Update Invoice</button>
+  </form>
+  <hr>
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+{% endblock %}
