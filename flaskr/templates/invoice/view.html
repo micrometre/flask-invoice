@@ -1,8 +1,69 @@
-{% extends 'base.html' %}
+<!doctype html>
 
-{% block header %}
-<h1>{% block title %}Edit "{{ invoices['id'] }}"{% endblock %}</h1>
-<h1>{% block client_name %}Edit "{{ invoices['client_name'] }}"{% endblock %}</h1>
+<head>
 
+    <title>{% block title %}{% endblock %} - Flaskr</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='view.css') }}">
+</head>
+
+{% block content %}
+
+<body>
+    <div class="invoice-box">
+        <table>
+            <tr class="top">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td class="title">
+                                <img alt="Company logo" style="width: 100%; max-width: 300px"
+                                    src="{{url_for('static', filename='logo.png')}}" />
+
+                            </td>
+
+                            <td>
+                                <label for="Invoice_number">Invoice Number:{{ invoices['invoice_number'] }}</label>
+                                <br />
+                                <label for="invoice_date">Invoice Date:{{invoices['invoice_date']}}</label>
+                                <br />
+                                <label for="due_date">Due Date:{{ invoices['due_date']}}</label>
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr class="information">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td>
+                                SkrewFast, Inc.<br />
+                                12345 Sunny Road<br />
+                                London SW8 9pp
+                            </td>
+
+                            <td>
+                                {{ invoices['client_name']}}
+                                John Doe<br />
+                                12345 Sunny Road<br />
+                                London SW6 9zz <br />
+                                john@example.com<br />
+                                07544 276 975 <br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</body>
 {% endblock %}
-

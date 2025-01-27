@@ -53,7 +53,7 @@ def create_invoice(id):
     if request.method == "GET":
         db = get_db()
         invoice = db.execute("SELECT * FROM invoices WHERE id = ?", (id,)).fetchone()
-        print(invoice)
+    print(invoice)
     return render_template("invoice/view.html", invoices=invoices)
 
 @bp.route("/create", methods=("GET", "POST"))
