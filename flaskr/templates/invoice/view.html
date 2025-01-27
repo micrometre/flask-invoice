@@ -3,7 +3,6 @@
 <head>
 
     <title>{% block title %}{% endblock %} - Flaskr</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -46,13 +45,11 @@
                         <tr>
                             <td>
                                 SkrewFast, Inc.<br />
-                                12345 Sunny Road<br />
-                                London SW8 9pp
+                                London SW11 4aa
                             </td>
 
                             <td>
-                                {{ invoices['client_name']}}
-                                John Doe<br />
+                                {{ invoices['client_name']}}<br />
                                 12345 Sunny Road<br />
                                 London SW6 9zz <br />
                                 john@example.com<br />
@@ -66,4 +63,7 @@
         </table>
     </div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 {% endblock %}
+
+</html>
