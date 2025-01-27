@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Edit "{{ invoices['id'] }}"{% endblock %}</h1>
+<h1>{% block client_name %}Edit "{{ invoices['client_name'] }}"{% endblock %}</h1>
+
+{% endblock %}
+

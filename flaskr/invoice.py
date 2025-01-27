@@ -1,5 +1,5 @@
 from itertools import count
-from flask import Blueprint
+from flask import Blueprint, json, jsonify
 from flask import flash
 from flask import g
 from flask import redirect
@@ -44,16 +44,17 @@ def get_post(id ):
     return post
 
 
-@bp.route("/<int:id>/up", methods=("GET", "POST"))
+
+
+@bp.route("/<int:id>/view", methods=("GET", "POST"))
 @login_required
 def create_invoice(id):
-    print(id)
     invoices = get_post(id)
-    if request.method == "POST":
-            print(id)
-    return("2222") 
-
-
+    if request.method == "GET":
+        db = get_db()
+        invoice = db.execute("SELECT * FROM invoices WHERE id = ?", (id,)).fetchone()
+        print(invoice)
+    return render_template("invoice/view.html", invoices=invoices)
 
 @bp.route("/create", methods=("GET", "POST"))
 @login_required
