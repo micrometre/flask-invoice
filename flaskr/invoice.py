@@ -1,8 +1,4 @@
-import datetime
 from itertools import count
-import random
-import string
-import time
 from flask import Blueprint
 from flask import flash
 from flask import g
@@ -11,8 +7,6 @@ from flask import render_template
 from flask import request
 from flask import url_for
 from werkzeug.exceptions import abort
-import pandas as pd
-import subprocess
 
 from .auth import login_required
 from .db import get_db
@@ -48,6 +42,17 @@ def get_post(id ):
         .fetchone()
     )
     return post
+
+
+@bp.route("/<int:id>/up", methods=("GET", "POST"))
+@login_required
+def create_invoice(id):
+    print(id)
+    invoices = get_post(id)
+    if request.method == "POST":
+            print(id)
+    return("2222") 
+
 
 
 @bp.route("/create", methods=("GET", "POST"))
@@ -99,31 +104,12 @@ def update(id):
                     'invoice_number': invoice_number, 
                     'description': description, 
                     }
-            date_time = (time.strftime("%b-%d-%Y-%H-%M"))
-            md_filename = "flaskr/data/" + invoice_number + date_time + ".md"  # type: ignore
-            pdf_filename = "flaskr/data/" + invoice_number + date_time + ".pdf"  # type: ignore
-            client_input = pd.DataFrame.from_dict(invoices_dict, orient='index')        
-            a = "---\n"
-            d = f"date: {date_time}\n"
-            e = f"{client_input.to_markdown()}\n"
-            a = "---\n"
-            file = open(f"{md_filename}","w")
-            L = [a, d, a, e] # type: ignore
-            file.writelines(L)
-            file.close()
-            arg1 = md_filename
-            arg2 = "-o" 
-            arg3 = pdf_filename 
-            output = subprocess.check_output(['pandoc',str(arg1), str(arg2), str(arg3)])
-            print(output)        
-            print(client_input)        
             db = get_db()
             db.execute(
                 "UPDATE invoices SET client_name = ?, description = ? WHERE id = ?", (client_name, description, id)
             )
             db.commit()
             return redirect(url_for("invoice.index"))
-
     return render_template("invoice/update.html", invoices=invoices)
 
 
@@ -132,6 +118,6 @@ def update(id):
 def delete(id):
     get_post(id)
     db = get_db()
-    db.execute("DELETE FROM invoice WHERE id = ?", (id,))
+    db.execute("DELETE FROM invoices WHERE id = ?", (id,))
     db.commit()
     return redirect(url_for("invoice.index"))

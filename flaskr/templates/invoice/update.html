@@ -37,6 +37,8 @@
     <button type="submit">Update Invoice</button>
   </form>
   <hr>
+  <form action="{{ url_for('invoice.delete', id=invoices['id']) }}" method="post">
     <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
   </form>
 {% endblock %}
