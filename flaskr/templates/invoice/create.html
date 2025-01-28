@@ -1,40 +1,30 @@
 {% extends 'base.html' %}
 
-{% block header %}
-<div class="container-fluid">
-</div>
-{% endblock %}
-
 {% block content %}
 
 <div class="container">
-  <header class="header">
-    <h1 class="text-center" id="title"> {% block title %}New Invoice{% endblock %}</h1>
-    <p id="description" class="text-center">
-      Create a new Invoice
-    </p>
-  </header>
   <div class="form-wrap">
-    <form id="create-form" method="POST">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="invoice_date">Invoice Date:</label>
-            <input type="date" id="invoice_date" class="form-control" name="invoice_date" required>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="due_date">Due Date:</label>
-            <input type="date" id="due_date" name="due_date" class="form-control" required>
-          </div>
-        </div>
-      </div>
+    <form id="create-invoice" method="post">
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
             <label for="invoice_number">Invoice Number:</label>
             <input type="datetime-local" id="invoice_number" name="invoice_number" class="form-control" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="invoice_date">Invoice Date:</label>
+            <input type="date" id="invoice_date" name="invoice_date" class="form-control" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="due_date">Due Date:</label>
+            <input type="date" id="due_date" name="due_date" class="form-control">
           </div>
         </div>
         <div class="col-md-6">
@@ -48,13 +38,13 @@
         <div class="col-md-6">
           <div class="form-group">
             <label for="client_address">Client Addressr:</label>
-            <input type="text" id="client_address" name="client_address" class="form-control">
+            <input type="text" id="client_address" name="client_address" class="form-control" required>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label for="client_postcode">Client Postcode:</label>
-            <input type="text" id="client_postcode" name="client_postcode" class="form-control">
+            <input type="text" id="client_postcode" name="client_postcode" class="form-control" required>
           </div>
         </div>
       </div>
@@ -73,19 +63,20 @@
           </div>
         </div>
       </div>
-      <div class="mb-3">
-        <label for="description" class="form-label">Description:</label>
-        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" class="form-control" name="description" rows="4" cols="50"></textarea>
+          </div>
+        </div>
       </div>
+      <div class="row">
+        <div class="col-md-4">
+          <button type="submit" id="submit" class="btn btn-primary btn-block">Create Invoice</button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
-
-
-<div class="row">
-  <div class="col-md-4">
-    <button type="submit" id="submit" class="btn btn-primary btn-block">Create Invoice</button>
-  </div>
-</div>
-
-
 {% endblock %}

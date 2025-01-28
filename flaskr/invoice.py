@@ -71,7 +71,7 @@ def create():
         client_phone = request.form.get('client_phone')
         error = None
         if not client_name:
-            error = "Title is required."
+            error = "name is required."
 
         if error is not None:
             flash(error)

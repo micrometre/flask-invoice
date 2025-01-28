@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+
+{% block header %}
+<div class="jumbotron">
+  <div class="container mt-4">
+    <p><a class="btn btn-primary btn-lg" href="{{ url_for('invoice.create_invoice', id=invoices['id']) }}" role="button"
+        target="_blank">
+
+        {% block preview %}Preview invoice {{ invoices['id'] }}{% endblock %}
+        »</a></p>
+  </div>
+</div>
+
+{% endblock %}
+
+
+{% block content %}
+<form id="create-form" method="POST">
+  <label for="invoice_date">Invoice Date:</label>
+  <input type="date" id="invoice_date" class="form-control" name="invoice_date"
+    value="{{request.form['invoice_date'] or invoices['invoice_date']}}" required>
+  <label for="due_date">Due Date:</label>
+  <input type="date" id="due_date" name="due_date" class="form-control" required
+    value="{{ request.form['due_date'] or invoices['due_date'] }}" required>
+  <label for="invoice_number">Invoice Number:</label>
+  <input type="datetime-local" id="invoice_number" name="invoice_number" class="form-control" required
+    value="{{ request.form['invoice_number'] or invoices['invoice_number'] }}" required>
+  <label for="client_name">Client Name:</label>
+  <input type="text" id="client_name" name="client_name" class="form-control" required
+    value="{{ request.form['client_name'] or invoices['client_name'] }}" required>
+  <label for="client_address">Client Addressr:</label>
+  <input type="text" id="client_address" name="client_address" class="form-control"
+    value="{{ request.form['client_address'] or invoices['client_address'] }}" required>
+  <label for="client_postcode">Client Postcode:</label>
+  <input type="text" id="client_postcode" name="client_postcode" class="form-control"
+    value="{{ request.form['client_postcode'] or invoices['client_postcode'] }}" required>
+  <label for="client_email">Client Email:</label>
+  <input type="email" id="client_email" name="client_email" class="form-control"
+    value="{{ request.form['client_email'] or invoices['client_email'] }}" required>
+  <label for="client_phone">Client Phone:</label>
+  <input type="tel" id="client_phone" name="client_phone" class="form-control" required
+    value="{{ request.form['client_phone'] or invoices['client_phone'] }}" required>
+  <label for="description" class="form-label">Description:</label>
+  <textarea class="form-control" id="description" name="description"
+    rows="3">{{ request.form['description'] or invoices['description'] }}</textarea>
+  <button type="submit" id="submit" class="btn btn-primary btn-block">Update Invoice</button>
+</form>
+</div>
+</div>
+
+
+<form action="{{ url_for('invoice.delete', id=invoices['id']) }}" method="post">
+  <input class="form-control" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+</form>
+
+
+{% endblock %}
