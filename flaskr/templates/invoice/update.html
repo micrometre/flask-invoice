@@ -1,30 +1,22 @@
 {% extends 'base.html' %}
 
-
-
-
-
-
 {% block header %}
-<div class="container-fluid">
+<div class="jumbotron">
+  <div class="container">
+    <h1 class="display-3">{% block edit %}Edit invoice {{ invoices['id'] }}{% endblock %}</h1>
+    <p><a class="btn btn-primary btn-lg" href="{{ url_for('invoice.create_invoice', id=invoices['id']) }}"
+        role="button" target="_blank">
 
-  <a class="action" href="{{ url_for('invoice.create_invoice', id=invoices['id']) }}" target="_blank">
-    <button type="button" class="btn btn-primary">
-    {% block title %}Preview invoice {{ invoices['id'] }}{% endblock %}
-    </button>
-  </a>
+        {% block preview %}Preview invoice {{ invoices['id'] }}{% endblock %}
+        »</a></p>
+  </div>
 </div>
+
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container">
   <form method="post">
-    <div>
-      <label for="client_name">Client Name:</label>
-      <input type="text" id="client_name" name="client_name"
-        value="{{ request.form['client_name'] or invoices['client_name'] }}" required>
-    </div>
-
     <div>
       <label for="invoice_date">Invoice Date:</label>
       <input type="date" id="invoice_date" name="invoice_date"
@@ -33,15 +25,46 @@
 
     <div>
       <label for="due_date">Due Date:</label>
-      <input type="date" id="due_date" name="due_date" value="{{ request.form['due_date'] or invoices['due_date'] }}"
-        required>
+      <input type="date" id="due_date" name="due_date" 
+      value="{{ request.form['due_date'] or invoices['due_date'] }}" required>
     </div>
 
     <div>
       <label for="invoice_number">Invoice Number:</label>
-      <input type="text" id="invoice_number" name="invoice_number"
-        value="{{ request.form['invoice_number'] or invoices['invoice_number'] }}">
+      <input type="datetime-local" id="invoice_number" name="invoice_number"
+
+        value="{{ request.form['invoice_number'] or invoices['invoice_number'] }}" required>
     </div>
+    <div>
+      <label for="client_name">Client Name:</label>
+      <input type="text" id="client_name" name="client_name"
+        value="{{ request.form['client_name'] or invoices['client_name'] }}" required>
+    </div>
+
+
+    <div>
+      <label for="client_address">Client Addressr:</label>
+      <input type="text" id="client_address" name="client_address"
+        value="{{ request.form['client_address'] or invoices['client_address'] }}" required>
+    </div>
+
+    <div>
+      <label for="client_postcode">Client Postcode:</label>
+      <input type="text" id="client_postcode" name="client_postcode"
+        value="{{ request.form['client_postcode'] or invoices['client_postcode'] }}" required>
+    </div>
+
+    <div>
+      <label for="client_email">Client Email:</label>
+      <input type="text" id="client_email" name="client_email"
+        value="{{ request.form['client_email'] or invoices['client_email'] }}" required>
+    </div>
+    <div>
+      <label for="client_phone">Client Phone:</label>
+      <input type="text" id="client_phone" name="client_phone"
+        value="{{ request.form['client_phone'] or invoices['client_phone'] }}" required>
+    </div>
+
 
     <div>
       <label for="description">Description:</label>

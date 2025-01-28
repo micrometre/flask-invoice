@@ -34,7 +34,7 @@ def get_post(id ):
     post = (
         get_db()
         .execute(
-            "SELECT p.id, client_name, invoice_date, due_date, invoice_number, description"
+            "SELECT p.id, client_name, invoice_date, due_date, invoice_number, description, client_address, client_postcode, client_email, client_phone"
             " FROM invoices p JOIN user u ON p.author_id = u.id"
             " WHERE p.id = ?",
             (id,),
@@ -60,12 +60,15 @@ def create_invoice(id):
 @login_required
 def create():
     if request.method == "POST":
-        client_name = request.form.get('client_name')
         invoice_date = request.form.get('invoice_date')
         due_date = request.form.get('due_date')
         invoice_number = request.form.get('invoice_number')
         description = request.form.get('description')
-
+        client_name = request.form.get('client_name')
+        client_address = request.form.get('client_address')
+        client_postcode = request.form.get('client_postcode')
+        client_email = request.form.get('client_email')
+        client_phone = request.form.get('client_phone')
         error = None
         if not client_name:
             error = "Title is required."
@@ -75,8 +78,8 @@ def create():
         else:
             db = get_db()
             db.execute(
-                "INSERT INTO invoices (author_id, client_name, invoice_date, due_date, invoice_number, description) VALUES (?, ?, ?, ?, ?, ?)",
-                ( g.user["id"], client_name, invoice_date, due_date, invoice_number, description),
+                "INSERT INTO invoices (author_id, invoice_date, due_date, invoice_number, description,client_name, client_address, client_postcode, client_email, client_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                ( g.user["id"], invoice_date, due_date, invoice_number, description, client_name, client_address, client_postcode, client_email, client_phone),
             )
             db.commit()
             return redirect(url_for("invoice.index"))
@@ -90,24 +93,21 @@ def create():
 def update(id):
     invoices = get_post(id)
     if request.method == "POST":
-        client_name = request.form.get('client_name')
         invoice_date = request.form.get('invoice_date')
         due_date = request.form.get('due_date')
         invoice_number = request.form.get('invoice_number')
         description = request.form.get('description')
+        client_name = request.form.get('client_name')
+        client_address = request.form.get('client_address')
+        client_postcode = request.form.get('client_postcode')
+        client_email = request.form.get('client_email')
+        client_phone = request.form.get('client_phone')
         if not client_name:
             flash = "Title is required."
         else:
-            invoices_dict = {
-                'client_name': client_name,
-                  'invoice_date': invoice_date,
-                    'due_date': due_date, 
-                    'invoice_number': invoice_number, 
-                    'description': description, 
-                    }
             db = get_db()
             db.execute(
-                "UPDATE invoices SET client_name = ?, description = ? WHERE id = ?", (client_name, description, id)
+                "UPDATE invoices SET invoice_date = ?, due_date = ?, invoice_number = ?, client_name = ?, client_address = ?, client_postcode = ?, description = ? WHERE id = ?" , (invoice_date, due_date, invoice_number, client_name, client_address, client_postcode, description, id)
             )
             db.commit()
             return redirect(url_for("invoice.index"))
