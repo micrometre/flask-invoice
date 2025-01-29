@@ -77,54 +77,6 @@
         </div>
       </div>
     </form>
-
-    <table id="invoice-items">
-      <thead>
-        <tr>
-          <th>Item</th>
-          <th>Quantity</th>
-          <th>Price</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><input type="text" name="item_1"></td>
-          <td><input type="number" id="a" name="quantity_1" value="1"></td>
-          <td><input type="number" id="b" name="price_1" step="0.01"></td>
-          <td><span id="total_1"></span></td>
-          <td><output name="result" for="a b">60</output></td>
-        </tr>
-      </tbody>
-      <tr>
-      </tr>
-    </table>
   </div>
-
-  <tr>
-
-    <form id="example-form">
-      <input type="number" id="b" name="b" value="50" /> +
-      <input type="number" id="a" name="a" value="10" /> =
-      <output name="result" for="a b">60</output>
-    </form>
-  </tr>
-  <script>
-    const form = document.getElementById("example-form");
-    const a = form.elements["a"];
-    const b = form.elements["b"];
-    const result = form.elements["result"];
-
-    function updateResult() {
-      const aValue = parseInt(a.value);
-      const bValue = parseInt(b.value);
-      result.value = aValue + bValue;
-    }
-
-    form.addEventListener("input", updateResult);
-
-    updateResult();
-
-  </script>
 </div>
 {% endblock %}
