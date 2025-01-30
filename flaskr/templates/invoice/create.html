@@ -73,6 +73,11 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-md-4">
+          <button type="submit" id="add-row" onclick="btnFunc();" class="btn btn-primary btn-block">Add Row</button>
+        </div>
+      </div>
       <table class="table table-bordered" id="invoice-items">
         <thead>
           <tr>
@@ -82,14 +87,17 @@
             <th>Total</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-          </tr>
-        </tbody>
       </table>
       <div class="row">
-        <div class="col-md-4">
-          <button type="submit" id="add-row"  onclick="btnFunc();" class="btn btn-primary btn-block">Add Row</button>
+        <div class="col">
+        </div>
+        <div class="col">
+        </div>
+        <div class="col">
+        </div>
+        <div class="col col-md-3">
+          <input type="text" class="form-control" id="grandTotal" placeholder="Grand Total">
+
         </div>
       </div>
       <div class="row">
@@ -100,11 +108,14 @@
       </div>
     </form>
   </div>
+  <input placeholder="Enter some text" name="name" />
+  <p id="values"></p>
   <script>
     function btnFunc() {
       event.preventDefault(); // To prevent following the link (optional)
-
     }
+
+  
   </script>
   <script src="{{url_for('static', filename='js/main.js')}}"></script>
   <script src="{{url_for('static', filename='js/update.js')}}"></script>
