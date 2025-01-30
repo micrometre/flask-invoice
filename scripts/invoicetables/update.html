@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <header class="header">
+    <p id="description" class="text-center"><a class="btn btn-primary btn-lg"
+        href="{{ url_for('invoice.create_invoice', id=invoices['id']) }}" role="button" target="_blank">
+
+        {% block preview %}Preview invoice {{ invoices['id'] }}{% endblock %}
+        »</a></p>
+    </p>
+  </header>
+  <div class="form-wrap">
+    <form id="update-invoice" method="post">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="invoice_number">Invoice Number:</label>
+            <input type="datetime-local" id="invoice_number" name="invoice_number"
+              value="{{ request.form['invoice_number'] or invoices['invoice_number'] }}" class="form-control" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="invoice_date">Invoice Date:</label>
+            <input type="date" id="invoice_date" name="invoice_date"
+              value="{{request.form['invoice_date'] or invoices['invoice_date']}}" class="form-control" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="due_date">Due Date:</label>
+            <input type="date" id="due_date" name="due_date"
+              value="{{ request.form['due_date'] or invoices['due_date'] }}" class="form-control">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="client_name">Client Name:</label>
+            <input type="text" id="client_name" name="client_name"
+              value="{{ request.form['client_name'] or invoices['client_name'] }}" class="form-control" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="client_address">Client Addressr:</label>
+            <input type="text" id="client_address" name="client_address"
+              value="{{ request.form['client_address'] or invoices['client_address'] }}" class="form-control" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="client_postcode">Client Postcode:</label>
+            <input type="text" id="client_postcode" name="client_postcode"
+              value="{{ request.form['client_postcode'] or invoices['client_postcode'] }}" class="form-control"
+              required>
+
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" class="form-control" name="description" rows="4"
+              cols="50">{{ request.form['description'] or invoices['description'] }}</textarea>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <button type="submit" id="submit" class="btn btn-primary btn-block">Update Invoice</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+
+
+<div class="container">
+  <form action="{{ url_for('invoice.delete', id=invoices['id']) }}" method="post">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+</div>
+<hr>
+
+{% endblock %}

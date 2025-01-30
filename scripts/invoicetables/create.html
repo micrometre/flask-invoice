@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="container">
+  <div class="form-wrap">
+    <form id="create-invoice" method="post">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="invoice_number">Invoice Number:</label>
+            <input type="text" id="invoice_number" name="invoice_number" class="form-control" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="invoice_date">Invoice Date:</label>
+            <input type="date" id="invoice_date" name="invoice_date" class="form-control" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="due_date">Due Date:</label>
+            <input type="date" id="due_date" name="due_date" class="form-control">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="client_name">Client Name:</label>
+            <input type="text" id="client_name" name="client_name" class="form-control" required>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="client_address">Client Addressr:</label>
+            <input type="text" id="client_address" name="client_address" class="form-control" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="client_postcode">Client Postcode:</label>
+            <input type="text" id="client_postcode" name="client_postcode" class="form-control" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="client_email">Client Email:</label>
+            <input type="email" id="client_email" name="client_email" class="form-control">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="client_phone">Client Phone:</label>
+            <input type="tel" id="client_phone" name="client_phone" class="form-control" required>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" class="form-control" name="description" rows="4" cols="50"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <table class="table table-bordered" id="invoice-items">
+        <thead>
+          <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Qty</th>
+            <th scope="col">Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="text" class="form-control form-control-sm" placeholder="item_1" name="item_1" /></td>
+            <td><input type="number" class="form-control form-control-sm" id="qty_1" name="b" value="50" /></td>
+            <td><input type="number" class="form-control form-control-sm" id="price_1" name="a" value="10" /></td>
+            <td><output name="result_1" class="form-control form-control-sm" for="qty_1 price_1">60</output></td>
+          </tr>
+
+        </tbody>
+      </table>
+      <div class="row">
+        <div class="col-md-4">
+          <button type="submit" id="add-row" class="btn btn-primary btn-block">Add Row</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <button type="submit" id="submit" class="btn btn-primary btn-block">Create Invoice</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script>
+    const convertToDateString = (date) => {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const day = date.getDate().toString().padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+    const convertToDateTimeLocalString = (date) => {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const day = date.getDate().toString().padStart(2, "0");
+      const hours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+    const currentTime = new Date()
+    document.getElementById('invoice_number').value = convertToDateTimeLocalString(currentTime)
+    document.getElementById('invoice_date').value = convertToDateString(currentTime)
+  </script>
+
+
+  <script>
+
+    const addRowButton = document.getElementById('add-row');
+    const invoiceItemsTable = document.getElementById('invoice-items');
+
+    addRowButton.addEventListener('click', () => {
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <p id="demo"></p>
+
+        <td><input type="text" class="form-control form-control-sm" placeholder="item_1"  name="item_${invoiceItemsTable.rows.length}" id="item_x}"></td>
+        <td><input type="number"class="form-control form-control-sm" id="qty_1" name="b" value="50"  name="quantity_${invoiceItemsTable.rows.length}" id="qty_x" min="1"></td>
+        <td><input type="number"class="form-control form-control-sm" id="price_1" name="a" value="10"  name="price_${invoiceItemsTable.rows.length} id="price_x" step="0.01"></td>
+        <td><output name="result_1" class="form-control form-control-sm" for="qty_1 price_1"><span id="total_${invoiceItemsTable.rows.length}">60</output></td><td>
+      `;
+      invoiceItemsTable.appendChild(newRow);
+      const form = document.getElementById("create-invoice");
+      const item_x = document.getElementById("item_x");
+      console.log(item_x)
+      document.getElementById("demo").innerHTML = "You wrote: " + text;
+
+    });
+
+
+
+
+    const form = document.getElementById("create-invoice");
+    const qty_1 = form.elements["qty_1"];
+    const price_1 = form.elements["price_1"];
+    const result = form.elements["result_1"];
+
+    function updateResult() {
+      const aValue = parseInt(qty_1.value);
+      const bValue = parseInt(price_1.value);
+      result.value = aValue + bValue;
+    }
+
+    form.addEventListener("input", updateResult);
+
+    updateResult();
+
+  </script>
+</div>
+{% endblock %}

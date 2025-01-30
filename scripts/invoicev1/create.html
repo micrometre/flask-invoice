@@ -38,7 +38,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label for="client_address">Client Address:</label>
+            <label for="client_address">Client Addressr:</label>
             <input type="text" id="client_address" name="client_address" class="form-control" required>
           </div>
         </div>
@@ -84,29 +84,26 @@
         </thead>
         <tbody>
           <tr>
+            <td><input type="text" class="form-control form-control-sm" placeholder="item_1" name="item_1" /></td>
+            <td><input type="number" class="form-control form-control-sm" id="qty_1" name="b" value="50" /></td>
+            <td><input type="number" class="form-control form-control-sm" id="price_1" name="a" value="10" /></td>
+            <td><output name="result_1" class="form-control form-control-sm" for="qty_1 price_1">60</output></td>
           </tr>
+
         </tbody>
       </table>
       <div class="row">
         <div class="col-md-4">
-          <button type="submit" id="add-row"  onclick="btnFunc();" class="btn btn-primary btn-block">Add Row</button>
+          <button type="submit" id="add-row" class="btn btn-primary btn-block">Add Row</button>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4">
-          <button type="submit" id="submit" class="btn btn-primary btn-block">Create
-            Invoice</button>
+          <button type="submit" id="submit" class="btn btn-primary btn-block">Create Invoice</button>
         </div>
       </div>
     </form>
   </div>
-  <script>
-    function btnFunc() {
-      event.preventDefault(); // To prevent following the link (optional)
-
-    }
-  </script>
   <script src="{{url_for('static', filename='js/main.js')}}"></script>
-  <script src="{{url_for('static', filename='js/update.js')}}"></script>
 </div>
 {% endblock %}
