@@ -3,8 +3,6 @@
 {% block content %}
 
 
-
-
 <div class="container">
   <div class="form-wrap">
     <form id="create-invoice" method="post">
@@ -12,7 +10,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label for="invoice_number">Invoice Number:</label>
-            <input type="datetime-local" id="invoice_number" name="invoice_number" class="form-control" required>
+            <input type="text" id="invoice_number" name="invoice_number" class="form-control" required>
           </div>
         </div>
         <div class="col-md-6">
@@ -79,20 +77,26 @@
         <thead>
           <tr>
             <th scope="col">Item</th>
-            <th scope="col">Quantity</th>
+            <th scope="col">Qty</th>
             <th scope="col">Price</th>
             <th>Total</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><input type="text"  class="form-control form-control-sm" placeholder="item_1" name="item_1" /></td>
-            <th><input type="number" class="form-control form-control-sm" id="b" name="b" value="50"  /></th>
-            <td><input type="number" class="form-control form-control-sm"  id="a" name="a" value="10" /></td>
-            <td><output name="result" class="form-control form-control-sm"  for="a b">60</output></td>
+            <td><input type="text" class="form-control form-control-sm" placeholder="item_1" name="item_1" /></td>
+            <td><input type="number" class="form-control form-control-sm" id="qty_1" name="b" value="50" /></td>
+            <td><input type="number" class="form-control form-control-sm" id="price_1" name="a" value="10" /></td>
+            <td><output name="result_1" class="form-control form-control-sm" for="qty_1 price_1">60</output></td>
           </tr>
+
         </tbody>
       </table>
+      <div class="row">
+        <div class="col-md-4">
+          <button type="submit" id="add-row" class="btn btn-primary btn-block">Add Row</button>
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-4">
           <button type="submit" id="submit" class="btn btn-primary btn-block">Create Invoice</button>
@@ -100,11 +104,55 @@
       </div>
     </form>
   </div>
+
+  <div>
+
+    <input id="start-time" type="text" name="start_time">
+
+  </div>
   <script>
+    const convertToDateString = (date) => {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const day = date.getDate().toString().padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+    const convertToDateTimeLocalString = (date) => {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const day = date.getDate().toString().padStart(2, "0");
+      const hours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+    const currentTime = new Date()
+    document.getElementById('start-time').value = convertToDateTimeLocalString(currentTime)
+    document.getElementById('invoice_number').value = convertToDateTimeLocalString(currentTime)
+    document.getElementById('invoice_date').value = convertToDateString(currentTime)
+  </script>
+
+
+  <script>
+
+    const addRowButton = document.getElementById('add-row');
+    const invoiceItemsTable = document.getElementById('invoice-items');
+
+    addRowButton.addEventListener('click', () => {
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td><input type="text" name="item_${invoiceItemsTable.rows.length}"></td>
+        <td><input type="number" name="quantity_${invoiceItemsTable.rows.length}" min="1"></td>
+        <td><input type="number" name="price_${invoiceItemsTable.rows.length}" step="0.01"></td>
+        <td><span id="total_${invoiceItemsTable.rows.length}"></span></td>
+      `;
+      invoiceItemsTable.appendChild(newRow);
+    });
+
     const form = document.getElementById("create-invoice");
-    const a = form.elements["a"];
-    const b = form.elements["b"];
-    const result = form.elements["result"];
+    const a = form.elements["qty_1"];
+    const b = form.elements["price_1"];
+    const result = form.elements["result_1"];
 
     function updateResult() {
       const aValue = parseInt(a.value);
