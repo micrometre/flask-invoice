@@ -2,6 +2,9 @@ import os
 
 from flask import Flask
 
+from flask_cors import CORS
+
+
 
 def create_app(test_config=None):
     """Create and configure an instance of the Flask application."""
@@ -13,6 +16,8 @@ def create_app(test_config=None):
         DATABASE=os.path.join(app.instance_path, "flaskr.sqlite"),
     )
 
+    app.config['CORS_HEADERS'] = 'Content-Type'
+    CORS(app, resources=r'/*', headers='Content-Type')
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile("config.py", silent=True)

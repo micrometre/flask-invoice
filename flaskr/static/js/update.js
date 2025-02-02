@@ -14,20 +14,34 @@ addRowButton.addEventListener('click', () => {
 });
 
 
+
 function calculateTotal(rowIndex) {
   const qtyInput = document.getElementById(`qty_${rowIndex}`);
   const priceInput = document.getElementById(`price_${rowIndex}`);
   const totalOutput = document.getElementById(`total_${rowIndex}`);
-      console.log(totalOutput )
   const quantity = parseFloat(qtyInput.value) || 0; // Handle potential NaN
   const price = parseFloat(priceInput.value) || 0;
   const total = quantity * price;
   totalOutput.textContent = total.toFixed(2); // Format to two decimal places
+  calculateGrandTotal();
+
 
 }
 
-function calculateGrandTotal(rowIndex){
- const totalOutput = document.getElementById(`total_${rowIndex}`);
-}
 
-calculateGrandTotal()
+
+function calculateGrandTotal(){
+  let grandTotal = 0;
+  const rows = invoiceItemsTable.rows;
+  for (let i = 1; i < rows.length; i++) { // Start from index 1 to skip header row
+      const rowTotalElement = rows[i].querySelector('[id^="total_"]');
+      const rowTotal = parseFloat(rowTotalElement.textContent) || 0;
+      grandTotal += rowTotal;
+      console.log(grandTotal)
+  }
+  const grandTotalElement = document.getElementById('grandTotal');
+  document.getElementById('grandTotal').value = grandTotal
+
+  grandTotalElement.textContent = grandTotal.toFixed(2);
+
+}
