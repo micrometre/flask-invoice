@@ -69,10 +69,10 @@ def create():
         client_postcode = request.form.get('client_postcode')
         client_email = request.form.get('client_email')
         client_phone = request.form.get('client_phone')
+        itemes_item = request.form.get('item')
         error = None
         if not client_name:
             error = "name is required."
-
         if error is not None:
             flash(error)
         else:
@@ -81,6 +81,7 @@ def create():
                 "INSERT INTO invoices (author_id, invoice_date, due_date, invoice_number, description,client_name, client_address, client_postcode, client_email, client_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 ( g.user["id"], invoice_date, due_date, invoice_number, description, client_name, client_address, client_postcode, client_email, client_phone),
             )
+
             db.commit()
             return redirect(url_for("invoice.index"))
     return render_template("invoice/create.html")

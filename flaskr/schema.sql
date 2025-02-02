@@ -27,6 +27,18 @@ CREATE TABLE invoices (
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE invoice_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    invoice_id INTEGER,
+    item TEXT NOT NULL,
+    qty INTEGER NOT NULL,
+    price REAL NOT NULL,
+    total REAL NOT NULL,
+    FOREIGN KEY (invoice_id) REFERENCES invoices(id)
+);
+
+
+
 
 CREATE TABLE providers (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,3 +49,5 @@ CREATE TABLE providers (
   provider_address TEXT ,
   provider_postcode TEXT 
 );
+
+
