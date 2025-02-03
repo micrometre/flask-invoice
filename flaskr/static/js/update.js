@@ -20,43 +20,30 @@ function calculateTotal(rowIndex) {
   const qtyInput = document.getElementById(`qty_${rowIndex}`);
   const priceInput = document.getElementById(`price_${rowIndex}`);
   const totalOutput = document.getElementById(`total_${rowIndex}`);
+  const grandTotalElement = document.getElementById('grandTotal');
+  const grandTotal = grandTotalElement.value || 0; // Handle potential NaN
   const itemsItem = itemInput.value || 0; // Handle potential NaN
   const quantity = parseFloat(qtyInput.value) || 0; // Handle potential NaN
   const price = parseFloat(priceInput.value) || 0;
   const total = quantity * price;
   totalOutput.textContent = total.toFixed(2); // Format to two decimal places
-  console.log(itemsItem)
-  console.log(quantity)
-  console.log(price)
-  console.log(total)
-  sendForm()
+  console.log(grandTotal)
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', 'http://192.168.1.130:5000/invoiceitems', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+      console.log(xhr.responseText);
+    }
+  };
+  const data = JSON.stringify({ itemsItem: itemsItem, qty: quantity, price: price, total: total, grandTotal: grandTotal});
+  xhr.send(data);
+
   calculateGrandTotal();
 }
 
 
 
-function sendForm() {
-  // 1. Create a new XMLHttpRequest instance
-const xhr = new XMLHttpRequest();
-
-// 2. Define the request method and URL
-xhr.open('POST', 'http://192.168.1.130:5000/test', true);
-
-// 3. Set request headers (if needed)
-xhr.setRequestHeader('Content-Type', 'application/json');
-
-// 4. Define the response handler
-xhr.onreadystatechange = function() {
-  if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-    // Handle the server response
-    console.log(xhr.responseText);
-  }
-};
-
-// 5. Send the request with data payload
-const data = JSON.stringify({ name: 'John Doe', email: 'john@example.com' });
-xhr.send(data);
-}
 
 
 function calculateGrandTotal() {

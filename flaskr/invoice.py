@@ -56,12 +56,16 @@ def create_invoice(id):
     print(invoice)
     return render_template("invoice/view.html", invoices=invoices)
 
-@bp.route("/test", methods=("GET", "POST"))
+@bp.route("/invoiceitems", methods=("GET", "POST"))
 def hello_world():
     if request.method == "POST":
             request_data = request.get_json()
-            print(request_data)
-            return jsonify(message="not published")    
+            itemsItem = request_data["itemsItem"]
+            itemsQty = request_data["qty"]
+            itemsPrice = request_data["price"]
+            grandTotal = request_data["grandTotal"]
+            print(grandTotal)
+            return jsonify(request_data)    
     return "<p>Hello, World!</p>"
 
 @bp.route('/test', methods=['POST'])
