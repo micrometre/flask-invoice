@@ -15,22 +15,21 @@ bp = Blueprint("invoice", __name__)
 #bp = Blueprint('invoice', __name__, url_prefix='/invoice')
 
 
-
-
-
-@bp.route("/")
-def index():
-    db = get_db()
-    invoices = db.execute(
-        "SELECT p.id, created, author_id, client_name, invoice_date, due_date, invoice_number, description"
-        " FROM invoices p JOIN user u ON p.author_id = u.id"
-        " ORDER BY created DESC"
-    ).fetchall()
-    return render_template("invoice/index.html", invoices=invoices)
+def get_invoice_items(id ):
+    post = (
+        get_db()
+        .execute(
+            "SELECT p.id,  item, qty, price, total"
+            " FROM invoice_items p JOIN user u ON p.item = u.id"
+            " WHERE p.id = ?",
+            (id,),
+        )
+        .fetchone()
+    )
+    return post
 
 
 def get_post(id ):
-
     post = (
         get_db()
         .execute(
@@ -42,6 +41,27 @@ def get_post(id ):
         .fetchone()
     )
     return post
+
+@bp.route("/")
+def index():
+    db = get_db()
+    invoices = db.execute(
+        "SELECT p.id, created, author_id, client_name, invoice_date, due_date, invoice_number, description"
+        " FROM invoices p JOIN user u ON p.author_id = u.id"
+        " ORDER BY created DESC"
+    ).fetchall()
+    return render_template("invoice/index.html", invoices=invoices)
+
+@bp.route("/<int:id>/t", methods=("GET", "POST"))
+@login_required
+def create_invoice_TABLE(id):
+    invoices = get_invoice_items(id)
+    if request.method == "GET":
+        db = get_db()
+        invoices = db.execute("SELECT * FROM invoice_items WHERE id = ?", (id,)).fetchone()
+    return render_template("invoice/table.html", invoices=invoices)
+
+
 
 
 
@@ -59,20 +79,29 @@ def create_invoice(id):
 @bp.route("/invoiceitems", methods=("GET", "POST"))
 def hello_world():
     if request.method == "POST":
-            request_data = request.get_json()
-            itemsItem = request_data["itemsItem"]
-            itemsQty = request_data["qty"]
-            itemsPrice = request_data["price"]
-            grandTotal = request_data["grandTotal"]
-            print(grandTotal)
-            return jsonify(request_data)    
+        request_data = request.get_json()
+        itemsItem = request_data["itemsItem"]
+        itemsQty = request_data["qty"]
+        itemsPrice = request_data["price"]
+        itemsTotal = request_data["total"]
+        error = None
+        if not itemsItem:
+            error = "name is required."
+        if error is not None:
+            flash(error)
+        else:
+            db = get_db()
+            db.execute(
+                "INSERT INTO invoice_items (item, qty, price, total ) VALUES (?, ?, ?, ?)",
+                (itemsItem, itemsQty, itemsPrice, itemsTotal),
+            )
+
+            db.commit()
+        print(itemsTotal)
+        return jsonify(request_data)    
     return "<p>Hello, World!</p>"
 
-@bp.route('/test', methods=['POST'])
-def handle_post_request():
-    if request.content_type == 'application/json':
-       data = request.get_json()  # Get JSON data from the request
-    return f"Raw data received: {data}" # Example response
+
 
 
 @bp.route("/create", methods=("GET", "POST"))
@@ -90,11 +119,8 @@ def create():
         client_phone = request.form.get('client_phone')
         form_data = request.form
         values_list = list(form_data.values())
-        item = values_list[9]
-        itemes_qty = values_list[10]
         itemes_price = values_list[11]
         #itemes_total = values_list[12]
-        print(request.form)
         error = None
         if not client_name:
             error = "name is required."
@@ -102,10 +128,6 @@ def create():
             flash(error)
         else:
             db = get_db()
-            db.execute(
-                "INSERT INTO invoice_items (item, qty, price, total) VALUES (?, ?, ?, ?)",
-                (client_name, itemes_price, itemes_price, itemes_price),
-            )
             db.execute(
                 "INSERT INTO invoices (author_id, invoice_date, due_date, invoice_number, description,client_name, client_address, client_postcode, client_email, client_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 ( g.user["id"], invoice_date, due_date, invoice_number, description, client_name, client_address, client_postcode, client_email, client_phone),

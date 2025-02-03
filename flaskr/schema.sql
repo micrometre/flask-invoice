@@ -4,6 +4,7 @@
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS invoices;
 DROP TABLE IF EXISTS providers;
+DROP TABLE IF EXISTS invoice_items;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -21,7 +22,7 @@ CREATE TABLE invoices (
     client_email TEXT NOT NULL,
     client_phone INTEGER NOT NULL,
     invoice_date TEXT NOT NULL, 
-    due_date TEXT NOT NULL,
+    due_date TEXT ,
     invoice_number TEXT,
     description TEXT,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP

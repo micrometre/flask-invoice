@@ -21,8 +21,6 @@ function calculateTotal(rowIndex) {
   const priceInput = document.getElementById(`price_${rowIndex}`);
   const totalOutput = document.getElementById(`total_${rowIndex}`);
   const grandTotalElement = document.getElementById('grandTotal');
-  const form = document.getElementById('create-invoice');
-
   const grandTotal = grandTotalElement.value || 0; // Handle potential NaN
   const itemsItem = itemInput.value || 0; // Handle potential NaN
   const quantity = parseFloat(qtyInput.value) || 0; // Handle potential NaN
@@ -30,27 +28,7 @@ function calculateTotal(rowIndex) {
   const total = quantity * price;
   totalOutput.textContent = total.toFixed(2); // Format to two decimal places
   console.log(grandTotal)
-
-
-
-
   const xhr = new XMLHttpRequest();
-  form.addEventListener('submit', (event) => {
-    event.preventDefault(); // Prevent default form submission
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://192.168.1.130:5000/create', true); // Replace with your actual endpoint
-    xhr.onreadystatechange = function () {
-      if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-        console.log('Request successful:', this.responseText);
-      } else if (this.readyState === XMLHttpRequest.DONE) {
-        console.error('Request failed:', this.status);
-      }
-    };
-
-    xhr.send(new FormData(form));
-  });
-
-
   xhr.open('POST', 'http://192.168.1.130:5000/invoiceitems', true);
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.onreadystatechange = function () {
@@ -58,11 +36,18 @@ function calculateTotal(rowIndex) {
       console.log(xhr.responseText);
     }
   };
-  const data = JSON.stringify({ itemsItem: itemsItem, qty: quantity, price: price, total: total, grandTotal: grandTotal });
+  const data = JSON.stringify({ 
+    itemsItem: itemsItem, 
+    qty: quantity, 
+    price: price, 
+    total: total, 
+    grandTotal: grandTotal
+  });
   xhr.send(data);
 
   calculateGrandTotal();
 }
+
 
 
 

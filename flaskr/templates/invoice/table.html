@@ -1,0 +1,69 @@
+<!doctype html>
+
+<head>
+
+    <title>{% block title %}{% endblock %} - Flaskr</title>
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='view.css') }}">
+</head>
+
+{% block content %}
+
+<body>
+    <div class="invoice-box">
+        <table>
+            <tr class="top">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td class="title">
+                                <img alt="Company logo" style="width: 100%; max-width: 300px"
+                                    src="{{url_for('static', filename='logo.png')}}" />
+
+                            </td>
+
+                            <td>
+                                <label for="Invoice_number">Invoice Number:{{ invoices['invoice_number'] }}</label>
+                                <br />
+                                <label for="invoice_date">Invoice Date:{{invoices['invoice_date']}}</label>
+                                <br />
+                                <label for="due_date">Due Date:{{ invoices['due_date']}}</label>
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr class="information">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td>
+                                SkrewFast, Inc.<br />
+                                London SW11 4aa
+                            </td>
+
+                            <td>
+                                {{ invoices['id']}}<br />
+                                {{ invoices['item']}}<br />
+                                {{ invoices['qty']}}<br />
+                                {{ invoices['price']}}<br />
+                                {{ invoices['client_phone']}}<br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+{% endblock %}
+
+</html>
