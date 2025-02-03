@@ -56,6 +56,21 @@ def create_invoice(id):
     print(invoice)
     return render_template("invoice/view.html", invoices=invoices)
 
+@bp.route("/test", methods=("GET", "POST"))
+def hello_world():
+    if request.method == "POST":
+            request_data = request.get_json()
+            print(request_data)
+            return jsonify(message="not published")    
+    return "<p>Hello, World!</p>"
+
+@bp.route('/test', methods=['POST'])
+def handle_post_request():
+    if request.content_type == 'application/json':
+       data = request.get_json()  # Get JSON data from the request
+    return f"Raw data received: {data}" # Example response
+
+
 @bp.route("/create", methods=("GET", "POST"))
 @login_required
 def create():
@@ -69,7 +84,13 @@ def create():
         client_postcode = request.form.get('client_postcode')
         client_email = request.form.get('client_email')
         client_phone = request.form.get('client_phone')
-        itemes_item = request.form.get('item')
+        form_data = request.form
+        values_list = list(form_data.values())
+        item = values_list[9]
+        itemes_qty = values_list[10]
+        itemes_price = values_list[11]
+        #itemes_total = values_list[12]
+        print(request.form)
         error = None
         if not client_name:
             error = "name is required."
@@ -77,6 +98,10 @@ def create():
             flash(error)
         else:
             db = get_db()
+            db.execute(
+                "INSERT INTO invoice_items (item, qty, price, total) VALUES (?, ?, ?, ?)",
+                (client_name, itemes_price, itemes_price, itemes_price),
+            )
             db.execute(
                 "INSERT INTO invoices (author_id, invoice_date, due_date, invoice_number, description,client_name, client_address, client_postcode, client_email, client_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 ( g.user["id"], invoice_date, due_date, invoice_number, description, client_name, client_address, client_postcode, client_email, client_phone),

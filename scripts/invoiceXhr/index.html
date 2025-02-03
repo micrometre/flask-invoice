@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+<body>
+  
+<div class="container">
+
+  {% block header %}
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">{% block title %}Create a new Invoice{% endblock %}</h1>
+      <a class="action" href="{{ url_for('invoice.create') }}">
+        <button type="button" class="btn btn-outline-primary">Start</button>
+
+      </a>
+      {% if g.user %}
+    </div>
+  </div>
+  {% endif %}
+  {% endblock %}
+
+
+  {% block content %}
+  {% for invoice in invoices %}
+  <div class="container">
+    <article class="post">
+      <div class="card-deck mb-3 ">
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">{{ invoice['invoice_number'] }}</h4>
+          </div>
+          <div class="card-body">
+            <div class="about">for {{ invoice['client_name'] }} on {{ invoice['created'].strftime('%Y-%m-%d') }}</div>
+            <p class="body">{{ invoice['description']}}</p>
+            <a class="action" href="{{ url_for('invoice.update', id=invoice['id']) }}">Edit
+            </a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+  {% endfor %}
+  {% endblock %}
+</body>
+{% include 'scripts.html' %}
+</html>
+
+

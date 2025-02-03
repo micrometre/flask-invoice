@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="container">
+  <div class="form-wrap">
+    <form id="create-invoice" method="post">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="invoice_number">Invoice Number:</label>
+            <input type="text" id="invoice_number" name="invoice_number" class="form-control" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="invoice_date">Invoice Date:</label>
+            <input type="date" id="invoice_date" name="invoice_date" class="form-control" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="due_date">Due Date:</label>
+            <input type="date" id="due_date" name="due_date" class="form-control">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="client_name">Client Name:</label>
+            <input type="text" id="client_name" name="client_name" class="form-control" required>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="client_address">Client Address:</label>
+            <input type="text" id="client_address" name="client_address" class="form-control" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="client_postcode">Client Postcode:</label>
+            <input type="text" id="client_postcode" name="client_postcode" class="form-control" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="client_email">Client Email:</label>
+            <input type="email" id="client_email" name="client_email" class="form-control">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="client_phone">Client Phone:</label>
+            <input type="tel" id="client_phone" name="client_phone" class="form-control" required>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" class="form-control" name="description" rows="4" cols="50"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <button type="submit" id="add-row" onclick="btnFunc();" class="btn btn-primary btn-block">Add Row</button>
+        </div>
+      </div>
+      <table class="table table-bordered" id="invoice-items">
+        <thead>
+          <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Qty</th>
+            <th scope="col">Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+      </table>
+      <div class="row">
+        <div class="col">
+        </div>
+        <div class="col">
+        </div>
+        <div class="col">
+        </div>
+        <div class="col col-md-3">
+          <input type="text" class="form-control" id="grandTotal" placeholder="Grand Total">
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <button type="submit" id="submit" class="btn btn-primary btn-block">Create
+            Invoice</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script>
+
+    function btnFunc() {
+      event.preventDefault(); // To prevent following the link (optional)
+    }
+
+
+  </script>
+  <script src="{{url_for('static', filename='js/main.js')}}"></script>
+  <script src="{{url_for('static', filename='js/update.js')}}"></script>
+</div>
+{% endblock %}
