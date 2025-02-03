@@ -84,6 +84,7 @@ def hello_world():
         itemsQty = request_data["qty"]
         itemsPrice = request_data["price"]
         itemsTotal = request_data["total"]
+        grandTotal = request_data["grand_total"]
         error = None
         if not itemsItem:
             error = "name is required."
@@ -92,12 +93,11 @@ def hello_world():
         else:
             db = get_db()
             db.execute(
-                "INSERT INTO invoice_items (item, qty, price, total ) VALUES (?, ?, ?, ?)",
-                (itemsItem, itemsQty, itemsPrice, itemsTotal),
+                "INSERT INTO invoice_items (item, qty, price, total, grand_total) VALUES (?, ?, ?, ?, ?)",
+                (itemsItem, itemsQty, itemsPrice, itemsTotal, grandTotal),
             )
 
             db.commit()
-        print(itemsTotal)
         return jsonify(request_data)    
     return "<p>Hello, World!</p>"
 

@@ -31,10 +31,11 @@ CREATE TABLE invoices (
 CREATE TABLE invoice_items (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     invoice_id INTEGER,
-    item TEXT NOT NULL,
+    item TEXT  NOT NULL,
     qty INTEGER NOT NULL,
     price REAL NOT NULL,
     total REAL NOT NULL,
+    grand_total REAL NOT NULL,
     FOREIGN KEY (invoice_id) REFERENCES invoices(id)
 );
 

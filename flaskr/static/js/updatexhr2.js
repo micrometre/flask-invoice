@@ -28,7 +28,7 @@ function calculateTotal(rowIndex) {
   const price = parseFloat(priceInput.value) || 0;
   const total = quantity * price;
   totalOutput.textContent = total.toFixed(2); // Format to two decimal places
-  console.log(calculateGrandTotal())
+  console.log(grandTotal)
   const xhr = new XMLHttpRequest();
   form.addEventListener('submit', (event) => {
     event.preventDefault(); // Prevent default form submission
@@ -52,8 +52,10 @@ function calculateTotal(rowIndex) {
       console.log(xhr.responseText);
     }
   };
-  const data = JSON.stringify({ itemsItem: itemsItem, qty: quantity, price: price, total: total, grand_total: calculateGrandTotal(grandTotal) });
+  const data = JSON.stringify({ itemsItem: itemsItem, qty: quantity, price: price, total: total, grand_total: grand_total });
+  console.log(data)
   xhr.send(data);
+  calculateGrandTotal();
 }
 
 
@@ -69,7 +71,7 @@ function calculateGrandTotal() {
   }
   const grandTotalElement = document.getElementById('grandTotal');
   document.getElementById('grandTotal').value = grandTotal
-return(grandTotal)
+
   //grandTotalElement.textContent = grandTotal.toFixed(2);
 
 }
