@@ -52,29 +52,18 @@ def index():
     ).fetchall()
     return render_template("invoice/index.html", invoices=invoices)
 
-@bp.route("/<int:id>/t", methods=("GET", "POST"))
-@login_required
-def create_invoice_TABLE(id):
-    invoices = get_invoice_items(id)
-    if request.method == "GET":
-        db = get_db()
-        invoices = db.execute("SELECT * FROM invoice_items WHERE id = ?", (id,)).fetchone()
-    return render_template("invoice/table.html", invoices=invoices)
-
-
-
-
-
-
 @bp.route("/<int:id>/view", methods=("GET", "POST"))
 @login_required
 def create_invoice(id):
+    invoice_items = get_invoice_items(id)
     invoices = get_post(id)
     if request.method == "GET":
         db = get_db()
         invoice = db.execute("SELECT * FROM invoices WHERE id = ?", (id,)).fetchone()
-    print(invoice)
-    return render_template("invoice/view.html", invoices=invoices)
+        invoice_items = db.execute("SELECT * FROM invoice_items WHERE id = ?", (id,)).fetchone()
+    return render_template("invoice/table.html", invoice_items=invoice_items, invoices=invoices)
+
+
 
 @bp.route("/invoiceitems", methods=("GET", "POST"))
 def hello_world():

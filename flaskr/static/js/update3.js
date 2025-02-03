@@ -14,8 +14,8 @@ addRowButton.addEventListener('click', () => {
 });
 
 
+
 function calculateTotal(rowIndex) {
-  // ... (your existing code to calculate total)
   const itemInput = document.getElementById(`item_${rowIndex}`);
   const qtyInput = document.getElementById(`qty_${rowIndex}`);
   const priceInput = document.getElementById(`price_${rowIndex}`);
@@ -25,19 +25,20 @@ function calculateTotal(rowIndex) {
   const quantity = parseFloat(qtyInput.value) || 0; // Handle potential NaN
   const price = parseFloat(priceInput.value) || 0;
   const total = quantity * price;
-  totalOutput.textContent = total.toFixed(2); 
+  totalOutput.textContent = total.toFixed(2); // Format to two decimal places
+
+  
   const xhr = new XMLHttpRequest();
+
 
   function submitForm() {
     form.addEventListener('submit', (event) => {
       event.preventDefault(); // Prevent default form submission
-
       const xhr = new XMLHttpRequest();
       xhr.open('POST', 'http://192.168.1.130:5000/create', true); // Replace with your actual endpoint
       xhr.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
           console.log('Request successful:', this.responseText);
-          invoiceItems(); // Call invoiceItems after successful form submission
         } else if (this.readyState === XMLHttpRequest.DONE) {
           console.error('Request failed:', this.status);
         }
@@ -45,22 +46,29 @@ function calculateTotal(rowIndex) {
 
       xhr.send(new FormData(form));
     });
+
   }
 
   function invoiceItems() {
     xhr.open('POST', 'http://192.168.1.130:5000/invoiceitems', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function () {
-      if (xhr.readyState === XMLHttpRequest.DONE && this.status === 200) {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
         console.log(xhr.responseText);
       }
     };
-    const data = JSON.stringify({ itemsItem: itemsItem, qty: quantity, price: price, total: total, grand_total: calculateGrandTotal() });
+    const data = JSON.stringify({ itemsItem: itemsItem, qty: quantity, price: price, total: total, grand_total: calculateGrandTotal(grandTotal) });
     xhr.send(data);
   }
 
-  submitForm();
+
+
+  submitForm()
+  invoiceItems()
+
+
 }
+
 
 
 
