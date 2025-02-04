@@ -11,7 +11,7 @@
     <p id="description" class="text-center"><a class="btn btn-primary btn-lg"
         href="{{ url_for('invoice.create_invoice', id=invoices['id']) }}" role="button" target="_blank">
 
-        {% block preview %}Preview invoice {{ invoices['id'] }}{% endblock %}
+        {% block preview %}Preview invoice {{ invoices['id'] }}  Preview invoice  {% endblock %}
         »</a></p>
     </p>
   </header>
@@ -74,13 +74,15 @@
         <div class="col-md-6">
           <div class="form-group">
             <label for="client_email">Client Email:</label>
-            <input type="email" id="client_email" name="client_email" class="form-control">
+            <input type="email" id="client_email" name="client_email" class="form-control"
+              value="{{ request.form['client_email'] or invoices['client_email'] }}" class="form-control">
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label for="client_phone">Client Phone:</label>
-            <input type="tel" id="client_phone" name="client_phone" class="form-control" required>
+            <input type="tel" id="client_phone" name="client_phone" class="form-control" required
+              value="{{ request.form['client_phone'] or invoices['client_phone'] }}" class="form-control">
           </div>
         </div>
       </div>
@@ -99,6 +101,32 @@
       <div class="row">
         <div class="col-md-4">
           <button type="submit" id="submit" class="btn btn-primary btn-block">Update Invoice</button>
+        </div>
+      </div>
+
+      <table class="table table-bordered" id="invoice-items">
+        <thead>
+          <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Qty</th>
+            <th scope="col">Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+      </table>
+      <div class="row">
+        <div class="col">
+          {{ invoice_items['id']}}<br />
+
+        </div>
+        <div class="col">
+        </div>
+        <div class="col">
+        </div>
+        <div class="col col-md-3">
+          <input type="text" class="form-control" id="grandTotal" placeholder="Grand Total"
+              value="{{ request.form['invoice-items'] or invoice_items['item'] }}" class="form-control" required>
+
         </div>
       </div>
 

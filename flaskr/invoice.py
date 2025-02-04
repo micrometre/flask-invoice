@@ -66,7 +66,7 @@ def create_invoice(id):
 
 
 @bp.route("/invoiceitems", methods=("GET", "POST"))
-def hello_world():
+def put_invoce_items():
     if request.method == "POST":
         request_data = request.get_json()
         itemsItem = request_data["itemsItem"]
@@ -88,7 +88,7 @@ def hello_world():
 
             db.commit()
         return jsonify(request_data)    
-    return "<p>Hello, World!</p>"
+    return "<p> World!</p>"
 
 
 
@@ -132,6 +132,7 @@ def create():
 @bp.route("/<int:id>/update", methods=("GET", "POST"))
 @login_required
 def update(id):
+    invoice_items = get_invoice_items(id)
     invoices = get_post(id)
     if request.method == "POST":
         invoice_date = request.form.get('invoice_date')
@@ -143,16 +144,23 @@ def update(id):
         client_postcode = request.form.get('client_postcode')
         client_email = request.form.get('client_email')
         client_phone = request.form.get('client_phone')
+        itemsItem = request.form.get("item")
+        itemsQty = request.form.get("qty")
+        itemsPrice = request.form.get("price")
+        itemsTotal = request.form.get("total")
+        itemsTotal = request.form.get("total")
+        itemsGrandTotal = request.form.get("grand_total")
         if not client_name:
             flash = "Title is required."
         else:
             db = get_db()
             db.execute(
-                "UPDATE invoices SET invoice_date = ?, due_date = ?, invoice_number = ?, client_name = ?, client_address = ?, client_postcode = ?, description = ? WHERE id = ?" , (invoice_date, due_date, invoice_number, client_name, client_address, client_postcode, description, id)
+                "UPDATE invoices SET invoice_date = ?, due_date = ?, invoice_number = ?, client_name = ?, client_address = ?, client_postcode = ?, client_phone = ?,  description = ? WHERE id = ?" , (invoice_date, due_date, invoice_number, client_name, client_address, client_postcode, client_phone, description, id)
             )
+
             db.commit()
             return redirect(url_for("invoice.index"))
-    return render_template("invoice/update.html", invoices=invoices)
+    return render_template("invoice/update.html", invoices=invoices, invoice_items=invoice_items )
 
 
 @bp.route("/<int:id>/delete", methods=("POST",))
