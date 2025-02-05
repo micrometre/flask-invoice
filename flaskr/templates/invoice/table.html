@@ -76,42 +76,47 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for invoice in invoice_items %}
                     <tr>
-                      <th scope="row">1</th>
-                      <td>Mark</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
+                        <th scope="row"> {{ invoice_items['item']}}</th>
+                        <td>{{ invoice_items['qty']}}<br /></td>
+                        <td>{{ invoice_items['price']}}<br /></td>
+                        <td>{{ invoice_items['total']}}<br /></td>
                     </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Jacob</td>
-                      <td>Thornton</td>
-                      <td>@fat</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>Larry</td>
-                      <td>the Bird</td>
-                      <td>@twitter</td>
-                    </tr>
-                  </tbody>
+                    {% endfor %}
+                </tbody>
+
             </table>
-
-
-
-
         </table>
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col">
+            </div>
+            <div class="col">
+            </div>
+            <div class="col col-md-3">
+                <input type="text" class="form-control" id="grandTotal" placeholder="Grand Total">
+
+            </div>
+        </div>
     </div>
 
-
-    {{ invoice_items['id']}}<br />
-    {{ invoice_items['item']}}<br />
-    {{ invoice_items['qty']}}<br />
-    {{ invoice_items['price']}}<br />
-    {{ invoice_items['total']}}<br />
-    {{ invoice_items['grand_toatal']}}<br />
-
 </body>
+<script>
+    const invoiceItemsTable = document.getElementById('invoice-items');
+
+    function calculateGrandTotal() {
+        let grandTotal = 0;
+        const rows = invoiceItemsTable.rows;
+        const grandTotalElement = document.getElementById('grandTotal');
+        document.getElementById('grandTotal').value = grandTotal
+        return (grandTotal)
+        //grandTotalElement.textContent = grandTotal.toFixed(2);
+
+    }
+    calculateGrandTotal()
+</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 {% endblock %}
 

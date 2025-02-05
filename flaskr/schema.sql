@@ -35,7 +35,6 @@ CREATE TABLE invoice_items (
     qty INTEGER NOT NULL,
     price REAL NOT NULL,
     total REAL NOT NULL,
-    grand_total REAL NOT NULL,
     FOREIGN KEY (invoice_id) REFERENCES invoices(id)
 );
 
