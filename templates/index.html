@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+  <div id="mydiv"></div>
+
+  <script type="text/babel">
+    import { useState } from 'react';
+    import ReactDOM from 'react-dom/client';
+    function Hello() {
+      const [name, setName] = useState("");
+
+      return (
+        <form>
+      <label>Enter your name:
+        <input
+          type="text" 
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </label>
+    </form>
+      )
+    }
+
+    const container = document.getElementById('mydiv');
+    const root = ReactDOM.createRoot(container);
+    root.render(<Hello />)
+  </script>
+</div>
+
+{% include 'scripts.html' %}
+
+{% endblock %}
