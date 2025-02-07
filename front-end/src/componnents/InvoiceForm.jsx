@@ -1,170 +1,134 @@
 import React, { useState } from 'react';
 
-const InvoiceItem = ({ index, onRemoveItem }) => {
-  const [item, setItem] = useState('');
-  const [quantity, setQuantity] = useState(1);
-  const [price, setPrice] = useState(0);
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    if (name === 'item') setItem(value);
-    if (name === 'quantity') setQuantity(value);
-    if (name === 'price') setPrice(value);
-  };
+function getDate() {
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const year = today.getFullYear();
+  const date = today.getDate();
+  return `${month}/${date}/${year}`;
+}
 
-  return (
-    <tr>
-      <td className='py-3 px-4 text-base text-gray-500 font-medium'>
-        <input
-          type="text"
-          className="w-40 border p-2"
-          name="item"
-          value={item}
-          onChange={handleInputChange}
-          placeholder="Item"
-        />
-      </td>
-      <td className='py-3 px-4 text-base text-gray-500 font-medium'>
-        <input
-          type="number"
-          className="w-20 border p-2"
-          name="quantity"
-          value={quantity}
-          onChange={handleInputChange}
-          min="1"
-        />
-      </td>
-      <td className='py-3 px-4 text-base text-gray-500 font-medium'>
-        <input
-          type="number"
-          className="w-20 border p-2"
-          name="price"
-          value={price}
-          onChange={handleInputChange}
-          step="0.01"
-        />
-      </td>
-      <td className='py-3 px-4 text-base text-gray-500 font-medium'>
-        {(quantity * price).toFixed(2)}
-      </td>
-      <td>
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={() => onRemoveItem(index)}
-        >
-          Remove
-        </button>
-      </td>
-    </tr>
-  );
-};
 
-const InvoiceForm = () => {
-  const [invoiceItems, setInvoiceItems] = useState([]);
+function convertToDateString(date) {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = (today.getMonth() + 1).toString().padStart(2, "0");
+  const day = today.getDate().toString().padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
 
-  const handleAddItem = () => {
-    setInvoiceItems([...invoiceItems, { item: '', quantity: 1, price: 0 }]);
-  };
 
-  const handleRemoveItem = (index) => {
-    setInvoiceItems(invoiceItems.filter((_, i) => i !== index));
-  };
-
-  const calculateTotal = () => {
-    return invoiceItems.reduce((total, item) => {
-      return total + (parseFloat(item.quantity) || 0) * (parseFloat(item.price) || 0);
-    }, 0).toFixed(2);
-  };
-
-  return (
-    <div className="mx-auto ">
-      <ContactForm/>
-      <div className="bg-white"> {/* Container */}
-        <div className=" w-full">
-          <table className="table px-4 min-w-full rounded-md border border-gray-200 overflow-hidden ">
-            <thead  className="bg-gray-100 ">
-              <tr>
-                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Items</th>
-                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Qty</th>
-                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Price</th>
-                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Total</th>
-                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {invoiceItems.map((item, index) => (
-                <InvoiceItem
-                  key={index}
-                  index={index}
-                  onRemoveItem={handleRemoveItem}
-                />
-              ))}
-              <tr>
-                <td colSpan="3" className="text-right">
-                  <strong>Total:</strong>
-                </td>
-                <td>${calculateTotal()}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <button className="btn btn-primary" onClick={handleAddItem}>
-        Add Item
-      </button>
-    </div>
-  );
-};
 
 
 const ContactForm = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [invoiceNumber, setInvoIceNumber] = useState(convertToDateString());
+  const [invoiceDate, setInvoiceDate] = useState(getDate());
+  const [invoiceItems, setInvoiceItems] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [submissionStatus, setSubmissionStatus] = useState(null); // 'success', 'error', null
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle form submission logic here
-    console.log('Form submitted:', { name, email, message });
-    // Reset form fields after submission (optional)
-    setName('');
-    setEmail('');
-    setMessage('');
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      setSubmissionStatus('error'); // Set status to error for validation failures
+      return;
+    }
+    setSubmissionStatus('pending'); // Indicate submission is in progress
+    setErrors({}); // Clear previous errors
+    try {
+      const response = await fetch('http://127.0.0.1:5000/', { // Replace with your API endpoint
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ invoiceNumber, invoiceDate  }),
+      });
+      if (!response.ok) {
+        const message = `An error occurred: ${response.status}`;
+        throw new Error(message);
+      }
+      const responseData = await response.json(); // Or response.text() if server doesn't return JSON
+      console.log('Server response:', responseData);
+      setSubmissionStatus('success');
+      setInvoIceNumber('');
+      setInvoiceDate('');
+    } catch (error) {
+      console.error('Submission error:', error);
+      setSubmissionStatus('error');
+      setErrors({ submit: 'Failed to submit form. Please try again later.' }); // Generic submit error
+    }
+  };
+
+  const validateForm = () => {
+    let errors = {};
+    if (!invoiceNumber.trim()) {
+      errors.invoiceNumber = 'Invoice _number required';
+    }
+
+    if (!invoiceDate.trim()) {
+      errors.invoiceDate = 'Invoice date is required';
+    }
+    return errors;
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="name">Name:</label>
-        <input
-          type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="message">Message:</label>
-        <textarea
-          id="message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-      </div>
-      <button type="submit">Submit</button>
-    </form>
+    <div className="d mx-auto p-6 bg-white rounded-md shadow-md">
+      <h2 className="text-xl font-bold mb-6 text-gray-800">Contact Us</h2>
+      {submissionStatus === 'success' && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <strong className="font-bold">Success!</strong>
+          <span className="block sm:inline"> Thank you for your message.</span>
+        </div>
+      )}
+      {submissionStatus === 'error' && errors.submit && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <strong className="font-bold">Error!</strong>
+          <span className="block sm:inline"> {errors.submit}</span>
+        </div>
+      )}
+      <form onSubmit={handleSubmit}>
+        <div className="grid grid-cols-2 gap-4 w-full">
+          <div className="mb-4">
+            <label htmlFor="invoice_number" className="block text-gray-700 font-bold mb-2">invoice_number</label>
+            <input
+              type="text"
+              id="invoice_number"
+              value={invoiceNumber}
+              onChange={(e) => setName(e.target.invoiceNumber)}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.name ? 'border-red-500' : ''}`}
+            />
+            {errors.name && <p className="text-red-500 text-xs italic">{errors.name}</p>}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="invoice_date" className="block text-gray-700 font-bold mb-2">Invoice Date</label>
+            <input
+              type="text"
+              id="invoice_date"
+              value={invoiceDate}
+              onChange={(e) => setEmail(e.target.invoiceDate)}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
+            />
+            {errors.email && <p className="text-red-500 text-xs italic">{errors.email}</p>}
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            disabled={submissionStatus === 'pending'} // Disable button during submission
+          >
+            {submissionStatus === 'pending' ? 'Submitting...' : 'Submit'}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
-
-
-export default InvoiceForm;
+export default ContactForm;
