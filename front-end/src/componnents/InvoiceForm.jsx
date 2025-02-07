@@ -22,32 +22,25 @@ function convertToDateString(date) {
 
 
 const ContactForm = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+  const [fromDate, setFromDate] = useState(new Date());
+
   const [invoiceNumber, setInvoIceNumber] = useState(convertToDateString());
   const [invoiceDate, setInvoiceDate] = useState(getDate());
+  const [invoiceDueDate, setInvoiceDueDate] = useState([]);
   const [invoiceItems, setInvoiceItems] = useState([]);
   const [errors, setErrors] = useState({});
   const [submissionStatus, setSubmissionStatus] = useState(null); // 'success', 'error', null
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      setSubmissionStatus('error'); // Set status to error for validation failures
-      return;
-    }
     setSubmissionStatus('pending'); // Indicate submission is in progress
-    setErrors({}); // Clear previous errors
     try {
       const response = await fetch('http://127.0.0.1:5000/', { // Replace with your API endpoint
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ invoiceNumber, invoiceDate  }),
+        body: JSON.stringify({ invoiceNumber, invoiceDate, fromDate }),
       });
       if (!response.ok) {
         const message = `An error occurred: ${response.status}`;
@@ -58,6 +51,7 @@ const ContactForm = () => {
       setSubmissionStatus('success');
       setInvoIceNumber('');
       setInvoiceDate('');
+      setFromDate(new Date());
     } catch (error) {
       console.error('Submission error:', error);
       setSubmissionStatus('error');
@@ -65,17 +59,6 @@ const ContactForm = () => {
     }
   };
 
-  const validateForm = () => {
-    let errors = {};
-    if (!invoiceNumber.trim()) {
-      errors.invoiceNumber = 'Invoice _number required';
-    }
-
-    if (!invoiceDate.trim()) {
-      errors.invoiceDate = 'Invoice date is required';
-    }
-    return errors;
-  };
 
   return (
     <div className="d mx-auto p-6 bg-white rounded-md shadow-md">
@@ -100,7 +83,7 @@ const ContactForm = () => {
               type="text"
               id="invoice_number"
               value={invoiceNumber}
-              onChange={(e) => setName(e.target.invoiceNumber)}
+              onChange={(e) => setInvoIceNumber(e.target.invoiceNumber)}
               className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.name ? 'border-red-500' : ''}`}
             />
             {errors.name && <p className="text-red-500 text-xs italic">{errors.name}</p>}
@@ -111,10 +94,33 @@ const ContactForm = () => {
               type="text"
               id="invoice_date"
               value={invoiceDate}
-              onChange={(e) => setEmail(e.target.invoiceDate)}
+              onChange={(e) => setInvoiceDate(e.target.invoiceDate)}
               className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
             />
             {errors.email && <p className="text-red-500 text-xs italic">{errors.email}</p>}
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4 w-full">
+          <div className="mb-4">
+            <label htmlFor="due_date" className="block text-gray-700 font-bold mb-2">Due Date</label>
+            <input
+              id="fromDate"
+              name="fromDate"
+              type="date"
+              autoComplete="off"
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.name ? 'border-red-500' : ''}`}
+              value={
+                fromDate.getFullYear().toString() +
+                "-" +
+                (fromDate.getMonth() + 1).toString().padStart(2, 0) +
+                "-" +
+                fromDate.getDate().toString().padStart(2, 0)
+              }
+              onChange={(e) => {
+                setFromDate(new Date(e.target.value));
+              }}
+            />
+            {errors.name && <p className="text-red-500 text-xs italic">{errors.name}</p>}
           </div>
         </div>
         <div className="flex items-center justify-between">
