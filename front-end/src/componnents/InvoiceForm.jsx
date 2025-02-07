@@ -14,7 +14,7 @@ const InvoiceItem = ({ index, onRemoveItem }) => {
 
   return (
     <tr>
-      <td>
+      <td className='py-3 px-4 text-base text-gray-500 font-medium'>
         <input
           type="text"
           className="w-40 border p-2"
@@ -24,7 +24,7 @@ const InvoiceItem = ({ index, onRemoveItem }) => {
           placeholder="Item"
         />
       </td>
-      <td>
+      <td className='py-3 px-4 text-base text-gray-500 font-medium'>
         <input
           type="number"
           className="w-20 border p-2"
@@ -34,7 +34,7 @@ const InvoiceItem = ({ index, onRemoveItem }) => {
           min="1"
         />
       </td>
-      <td>
+      <td className='py-3 px-4 text-base text-gray-500 font-medium'>
         <input
           type="number"
           className="w-20 border p-2"
@@ -44,7 +44,7 @@ const InvoiceItem = ({ index, onRemoveItem }) => {
           step="0.01"
         />
       </td>
-      <td>
+      <td className='py-3 px-4 text-base text-gray-500 font-medium'>
         {(quantity * price).toFixed(2)}
       </td>
       <td>
@@ -78,16 +78,17 @@ const InvoiceForm = () => {
 
   return (
     <div className="mx-auto ">
+      <ContactForm/>
       <div className="bg-white"> {/* Container */}
         <div className=" w-full">
-          <table className="table  ">
+          <table className="table px-4 min-w-full rounded-md border border-gray-200 overflow-hidden ">
             <thead  className="bg-gray-100 ">
               <tr>
-                <th className="py-3 px-4 text-center text-sm font-medium uppercase tracking-wide" scope="col">Item</th>
-                <th className="py-3 px-4 text-center text-sm font-medium uppercase tracking-wide" scope="col">Qty</th>
-                <th className="py-3 px-4 text-center text-sm font-medium uppercase tracking-wide" scope="col">Price</th>
-                <th className="py-3 px-4 text-center text-sm font-medium uppercase tracking-wide" scope="col">Total</th>
-                <th className="py-3 px-4 text-center text-sm font-medium uppercase tracking-wide" scope="col">Actions</th>
+                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Items</th>
+                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Qty</th>
+                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Price</th>
+                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Total</th>
+                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -114,5 +115,56 @@ const InvoiceForm = () => {
     </div>
   );
 };
+
+
+const ContactForm = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Handle form submission logic here
+    console.log('Form submitted:', { name, email, message });
+    // Reset form fields after submission (optional)
+    setName('');
+    setEmail('');
+    setMessage('');
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="name">Name:</label>
+        <input
+          type="text"
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="message">Message:</label>
+        <textarea
+          id="message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
+
+
 
 export default InvoiceForm;
