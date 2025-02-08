@@ -21,7 +21,11 @@ function convertToDateString(date) {
 
 
 const ContactForm = () => {
-  const [clientAddress, setClientAddress] = useState('')
+  const [description, setDescription] = useState('')
+  const [clientPhone, setClientPhone] = useState('');
+  const [clientEmail, setClientEmail] = useState('');
+  const [clientPostcode, setClientPostcode] = useState('');
+  const [clientAddress, setClientAddress] = useState('');
   const [clientName, setClientName] = useState('');
   const [fromDate, setFromDate] = useState(new Date());
   const [invoiceNumber, setInvoIceNumber] = useState(convertToDateString());
@@ -38,13 +42,17 @@ const ContactForm = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          invoiceNumber, 
-          invoiceDate, 
-          fromDate, 
+        body: JSON.stringify({
+          invoiceNumber,
+          invoiceDate,
+          fromDate,
           clientName,
-          clientAddress
-         }),
+          clientAddress,
+          clientPostcode,
+          clientEmail,
+          clientPhone,
+          description
+        }),
       });
       if (!response.ok) {
         const message = `An error occurred: ${response.status}`;
@@ -59,6 +67,9 @@ const ContactForm = () => {
       setInvoiceDate('');
       setClientName('');
       setClientAddress('');
+      setClientEmail('');
+      setClientPhone('');
+      setDescription('');
 
 
     } catch (error) {
@@ -152,6 +163,52 @@ const ContactForm = () => {
               onChange={(e) => setClientAddress(e.target.value)}
             />
           </div>
+          <div className="mb-4">
+            <label htmlFor="client_postcode" className="block text-gray-700 font-bold mb-2">Client Postcode</label>
+            <input
+              type="text"
+              id="client_postcode"
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
+              value={clientPostcode}
+              onChange={(e) => setClientPostcode(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4 w-full">
+          <div className="mb-4">
+            <label htmlFor="client_email" className="block text-gray-700 font-bold mb-2">Client email</label>
+            <input
+              type="email"
+              id="client_email"
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
+              value={clientEmail}
+              onChange={(e) => setClientEmail(e.target.value)}
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="client_phone" className="block text-gray-700 font-bold mb-2">Client phone</label>
+            <input
+              type="phone"
+              id="client_phone"
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
+              value={clientPhone}
+              onChange={(e) => setClientPhone(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4 w-full">
+          <div className="mb-4">
+            <label htmlFor="description" className="block text-gray-700 font-bold mb-2">Description</label>
+            <textarea
+              id="description"
+              rows="1"
+              className={`shadow appearance-none border rounded w-80 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+
+
         </div>
         <div className="flex items-center justify-between">
           <button
