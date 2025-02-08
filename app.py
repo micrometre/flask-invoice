@@ -26,7 +26,9 @@ def put_invoce_items():
     if request.method == "POST":
         request_data = request.get_json()
         invoice_number = request_data['invoiceNumber']
+        invoice_due_date = request_data['fromDate']
         invoice_date = request_data['invoiceDate']
+        print(invoice_due_date)
         if not invoice_number:
             flash('Title is required!')
         elif not invoice_date:
@@ -34,7 +36,7 @@ def put_invoce_items():
         else:
             conn = get_db_connection()
             conn.execute('INSERT INTO posts (title, content) VALUES (?, ?)',
-                         (invoice_number, invoice_date))
+                         (invoice_number, invoice_due_date))
             conn.commit()
             conn.close()
 

@@ -9,7 +9,13 @@ function getDate() {
   return `${month}/${date}/${year}`;
 }
 
-
+function getDueDate() {
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const year = today.getFullYear();
+  const date = today.getDate();
+  return `${month}/${date}/${year}`;
+}
 function convertToDateString(date) {
   const today = new Date();
   const year = today.getFullYear();
@@ -131,15 +137,10 @@ const ContactForm = () => {
               name="fromDate"
               type="date"
               autoComplete="off"
-              value={
-                fromDate.getFullYear().toString() +
-                "-" +
-                (fromDate.getMonth() + 1).toString().padStart(2, 0) +
-                "-" +
-                fromDate.getDate().toString().padStart(2, 0)
-              }
+
               onChange={(e) => {
-                setFromDate(new Date(e.target.value));
+                setFromDate(e.target.value);
+                console.log(e.target.value)
               }}
             />
           </div>
