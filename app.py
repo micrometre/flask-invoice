@@ -20,45 +20,31 @@ def get_db_connection():
     return conn
 
 
-@app.route('/post')
-def index():
-    conn = get_db_connection()
-    posts = conn.execute('SELECT * FROM posts').fetchall()
-    conn.close()
-    return render_template('test.html', posts=posts)
-
 
 @app.route("/", methods=("GET", "POST"))
 def put_invoce_items():
     if request.method == "POST":
         request_data = request.get_json()
-        invoiceNumber = request_data['invoiceNumber']
-        print(invoiceNumber)
+        invoice_number = request_data['invoiceNumber']
+        invoice_date = request_data['invoiceDate']
+        if not invoice_number:
+            flash('Title is required!')
+        elif not invoice_date:
+            flash('Content is required!')
+        else:
+            conn = get_db_connection()
+            conn.execute('INSERT INTO posts (title, content) VALUES (?, ?)',
+                         (invoice_number, invoice_date))
+            conn.commit()
+            conn.close()
+
+        print(invoice_date)
         return jsonify(request_data)    
     return render_template("index.html")
 
 
 
-@app.route('/create/', methods=('GET', 'POST'))
-def create():
-    if request.method == 'POST':
-        request_data = request.get_json()
-        title = request.form['title']
-        content = request.form['content']
 
-        if not title:
-            flash('Title is required!')
-        elif not content:
-            flash('Content is required!')
-        else:
-            conn = get_db_connection()
-            conn.execute('INSERT INTO posts (title, content) VALUES (?, ?)',
-                         (title, content))
-            conn.commit()
-            conn.close()
-            return redirect(url_for('index'))
-    
-    return render_template('create.html')
 
 
 if __name__ == '__main__':

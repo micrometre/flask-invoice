@@ -64,7 +64,7 @@ const ContactForm = () => {
       }
       const responseData = await response.json(); // Or response.text() if server doesn't return JSON
       console.log('Server response:', responseData);
-      window.location.reload();
+      //window.location.reload();
 
       setSubmissionStatus('success');
       setInvoIceNumber('');
