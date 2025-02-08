@@ -15,7 +15,11 @@ function convertToDateString(date) {
   const year = today.getFullYear();
   const month = (today.getMonth() + 1).toString().padStart(2, "0");
   const day = today.getDate().toString().padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  const hours = today.getHours().toString().padStart(2, "0");
+  const minutes = today.getMinutes().toString().padStart(2, "0");
+  //return `${year}-${month}-${day}`;
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+
 }
 
 
@@ -37,7 +41,7 @@ const ContactForm = () => {
     event.preventDefault();
     setSubmissionStatus('pending'); // Indicate submission is in progress
     try {
-      const response = await fetch('http://127.0.0.1:5000/', { // Replace with your API endpoint
+      const response = await fetch('http://127.0.0.1:5000', { // Replace with your API endpoint
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
