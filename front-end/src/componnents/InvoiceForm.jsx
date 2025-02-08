@@ -20,14 +20,12 @@ function convertToDateString(date) {
 
 
 
-
 const ContactForm = () => {
+  const [clientAddress, setClientAddress] = useState('')
+  const [clientName, setClientName] = useState('');
   const [fromDate, setFromDate] = useState(new Date());
-
   const [invoiceNumber, setInvoIceNumber] = useState(convertToDateString());
   const [invoiceDate, setInvoiceDate] = useState(getDate());
-  const [invoiceDueDate, setInvoiceDueDate] = useState([]);
-  const [invoiceItems, setInvoiceItems] = useState([]);
   const [errors, setErrors] = useState({});
   const [submissionStatus, setSubmissionStatus] = useState(null); // 'success', 'error', null
 
@@ -40,7 +38,13 @@ const ContactForm = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ invoiceNumber, invoiceDate, fromDate }),
+        body: JSON.stringify({ 
+          invoiceNumber, 
+          invoiceDate, 
+          fromDate, 
+          clientName,
+          clientAddress
+         }),
       });
       if (!response.ok) {
         const message = `An error occurred: ${response.status}`;
@@ -48,10 +52,15 @@ const ContactForm = () => {
       }
       const responseData = await response.json(); // Or response.text() if server doesn't return JSON
       console.log('Server response:', responseData);
+      window.location.reload();
+
       setSubmissionStatus('success');
       setInvoIceNumber('');
       setInvoiceDate('');
-      setFromDate(new Date());
+      setClientName('');
+      setClientAddress('');
+
+
     } catch (error) {
       console.error('Submission error:', error);
       setSubmissionStatus('error');
@@ -78,7 +87,7 @@ const ContactForm = () => {
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-4 w-full">
           <div className="mb-4">
-            <label htmlFor="invoice_number" className="block text-gray-700 font-bold mb-2">invoice_number</label>
+            <label htmlFor="invoice_number" className="block text-gray-700 font-bold mb-2">Invoice number</label>
             <input
               type="text"
               id="invoice_number"
@@ -86,10 +95,9 @@ const ContactForm = () => {
               onChange={(e) => setInvoIceNumber(e.target.invoiceNumber)}
               className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.name ? 'border-red-500' : ''}`}
             />
-            {errors.name && <p className="text-red-500 text-xs italic">{errors.name}</p>}
           </div>
           <div className="mb-4">
-            <label htmlFor="invoice_date" className="block text-gray-700 font-bold mb-2">Invoice Date</label>
+            <label htmlFor="invoice_date" className="block text-gray-700 font-bold mb-2">Invoice date</label>
             <input
               type="text"
               id="invoice_date"
@@ -97,18 +105,17 @@ const ContactForm = () => {
               onChange={(e) => setInvoiceDate(e.target.invoiceDate)}
               className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
             />
-            {errors.email && <p className="text-red-500 text-xs italic">{errors.email}</p>}
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4 w-full">
           <div className="mb-4">
-            <label htmlFor="due_date" className="block text-gray-700 font-bold mb-2">Due Date</label>
+            <label htmlFor="fromDate" className="block text-gray-700 font-bold mb-2">Due date</label>
             <input
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.name ? 'border-red-500' : ''}`}
               id="fromDate"
               name="fromDate"
               type="date"
               autoComplete="off"
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.name ? 'border-red-500' : ''}`}
               value={
                 fromDate.getFullYear().toString() +
                 "-" +
@@ -120,7 +127,30 @@ const ContactForm = () => {
                 setFromDate(new Date(e.target.value));
               }}
             />
-            {errors.name && <p className="text-red-500 text-xs italic">{errors.name}</p>}
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="client_name" className="block text-gray-700 font-bold mb-2">Client name</label>
+            <input
+              type="text"
+              id="client_name"
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
+              value={clientName}
+              onChange={(e) => setClientName(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 w-full">
+          <div className="mb-4">
+            <label htmlFor="client_address" className="block text-gray-700 font-bold mb-2">Client address</label>
+            <input
+              type="text"
+              id="client_address"
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
+              value={clientAddress}
+              onChange={(e) => setClientAddress(e.target.value)}
+            />
           </div>
         </div>
         <div className="flex items-center justify-between">
