@@ -23,7 +23,7 @@ function convertToDateString(date) {
 
 
 
-const InvoiceForm = ({ index, onRemoveItem }) => {
+const ContactSection = () => {
   const [description, setDescription] = useState('')
   const [clientPhone, setClientPhone] = useState('');
   const [clientEmail, setClientEmail] = useState('');
@@ -221,6 +221,66 @@ const InvoiceForm = ({ index, onRemoveItem }) => {
 };
 
 
+const InvoiceItem = ({ index, onRemoveItem }) => {
+  const [item, setItem] = useState('');
+  const [quantity, setQuantity] = useState(1);
+  const [price, setPrice] = useState(0);
 
 
-export default InvoiceForm;
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    if (name === 'item') setItem(value);
+    if (name === 'quantity') setQuantity(value);
+    if (name === 'price') setPrice(value);
+  };
+
+  return (
+    <tr>
+      <td className='py-3 px-4 text-base text-gray-500 font-medium'>
+        <input
+          type="text"
+          className="w-40 border p-2"
+          name="item"
+          value={item}
+          onChange={handleInputChange}
+          placeholder="Item"
+        />
+      </td>
+      <td className='py-3 px-4 text-base text-gray-500 font-medium'>
+        <input
+          type="number"
+          className="w-20 border p-2"
+          name="quantity"
+          value={quantity}
+          onChange={handleInputChange}
+          min="1"
+        />
+      </td>
+      <td className='py-3 px-4 text-base text-gray-500 font-medium'>
+        <input
+          type="number"
+          className="w-20 border p-2"
+          name="price"
+          value={price}
+          onChange={handleInputChange}
+          step="0.01"
+        />
+      </td>
+      <td className='py-3 px-4 text-base text-gray-500 font-medium'>
+        {(quantity * price).toFixed(2)}
+      </td>
+      <td>
+        <button
+          className="btn btn-danger btn-sm"
+          onClick={() => onRemoveItem(index)}
+        >
+          Remove
+        </button>
+      </td>
+    </tr>
+  );
+};
+
+
+
+export default ContactSection;

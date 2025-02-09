@@ -34,7 +34,7 @@ def put_invoce_items():
         client_email = request_data['clientEmail']
         client_phone = request_data['clientPhone']
         description = request_data['description']
-        print(request_data)
+        print(client_name)
         if not invoice_number:
             flash('Title is required!')
         elif not invoice_date:

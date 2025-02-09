@@ -82,7 +82,7 @@ function convertToDateString(date) {
 }
 
 
-const InvoiceForm = () => {
+const ItemsSection = () => {
   const [currentDate, setCurrentDate] = useState(getDate());
   const [currentDateTime, setCurrentDateTime] = useState(convertToDateString());
   const [invoiceItems, setInvoiceItems] = useState([]);
@@ -135,16 +135,6 @@ const InvoiceForm = () => {
   return (
     <div className="mx-auto ">
       <form className="w-full border-sky-600 bg-red-100">
-        <div className="grid grid-cols-2 gap-4 w-full">
-          <div className="flex-row">
-            <label htmlFor="invoice_number">Invoice Number</label>
-            <input type="text" id="invoice_number" name="invoice_number" className="w-40 border p-2" defaultValue={currentDateTime} />
-          </div>
-          <div className="flex-row">
-            <label htmlFor="invoice_date">Invoice Date:</label>
-            <input type="text" id="invoice_date" name="invoice_date" className="w-40 border p-2" defaultValue={currentDate} />
-          </div>
-        </div>
         <div className="bg-white"> {/* Container */}
           <div className=" w-full">
             <table className="table px-4 min-w-full rounded-md border border-gray-200 overflow-hidden ">
@@ -199,4 +189,4 @@ const InvoiceForm = () => {
 
 
 
-export default InvoiceForm;
+export default ItemsSection;

@@ -25,15 +25,14 @@ CREATE TABLE user (
 
 CREATE TABLE invoices (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    author_id INTEGER NOT NULL,
+    invoice_number TEXT NOT NULL,
+    invoice_date TEXT NOT NULL, 
+    invoice_due_date TEXT NOT NULL,
     client_name TEXT NOT NULL,
     client_address TEXT NOT NULL,
     client_postcode TEXT NOT NULL,
     client_email TEXT NOT NULL,
     client_phone INTEGER NOT NULL,
-    invoice_date TEXT NOT NULL, 
-    due_date TEXT ,
-    invoice_number TEXT,
     description TEXT,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

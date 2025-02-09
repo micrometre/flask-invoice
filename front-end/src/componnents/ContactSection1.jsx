@@ -23,7 +23,7 @@ function convertToDateString(date) {
 
 
 
-const InvoiceForm = ({ index, onRemoveItem }) => {
+const ContactSection = () => {
   const [description, setDescription] = useState('')
   const [clientPhone, setClientPhone] = useState('');
   const [clientEmail, setClientEmail] = useState('');
@@ -221,6 +221,8 @@ const InvoiceForm = ({ index, onRemoveItem }) => {
 };
 
 
+;
 
 
-export default InvoiceForm;
+
+export default ContactSection;
