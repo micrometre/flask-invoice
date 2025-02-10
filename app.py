@@ -20,6 +20,19 @@ def get_db_connection():
     return conn
 
 
+@app.route("/a", methods=("GET", "POST"))
+def invoce_items():
+    if request.method == "POST":
+        request_data = request.get_json()
+        print(request_data)
+        return jsonify(request_data)    
+    return render_template("index.html")
+
+
+
+
+
+
 
 @app.route("/", methods=("GET", "POST"))
 def put_invoce_items():
