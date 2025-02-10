@@ -1,6 +1,6 @@
 import os
 import sqlite3
-from flask import Flask, jsonify, render_template, request, url_for, flash, redirect
+from flask import Flask, abort, json, jsonify, render_template, request, url_for, flash, redirect
 from flask_cors import CORS
 
 
@@ -10,8 +10,24 @@ app = Flask(__name__)
 
 CORS(app)
 app.config['SECRET_KEY'] = '705e2337c0a49c2ed160e600ed3556a5ac3e06929babafee'
+DATABASE = 'invoices.db'
 
+def init_db():
+    with sqlite3.connect(DATABASE) as conn:
+        conn.execute('''
+            CREATE TABLE IF NOT EXISTS invoices (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                items TEXT NOT NULL,
+                grand_total REAL NOT NULL
+            )
+        ''')
+        conn.commit()
 
+# Helper function to get a database connection
+def get_db():
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row  # Return rows as dictionaries
+    return conn
 
 
 def get_db_connection():
@@ -19,54 +35,46 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+# Save an invoice
+@app.route('/', methods=['POST'])
+def save_invoice():
+    data = request.get_json()
+    grand_total = float(data['grandTotal'])
+    items_json = json.dumps(data['invoiceItems'])
+
+    print(items_json)
+
+
+    # Insert into the database
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO invoices (items, grand_total)
+            VALUES (?, ?)
+        ''', (items_json, grand_total))
+        conn.commit()
+
+        # Get the ID of the newly created invoice
+        invoice_id = cursor.lastrowid
+
+    # Return the saved invoice
+    return jsonify({
+        'id': invoice_id,
+        'items': grand_total,
+        'grandTotal': grand_total
+    }), 201
+
+
+
+
+
 
 @app.route("/a", methods=("GET", "POST"))
 def invoce_items():
     if request.method == "POST":
         request_data = request.get_json()
-        print(request_data)
         return jsonify(request_data)    
     return render_template("index.html")
-
-
-
-
-
-
-
-@app.route("/", methods=("GET", "POST"))
-def put_invoce_items():
-    if request.method == "POST":
-        request_data = request.get_json()
-        invoice_number = request_data['invoiceNumber']
-        invoice_date = request_data['invoiceDate']
-        invoice_due_date = request_data['fromDate']
-        client_name = request_data['clientName']
-        client_address = request_data['clientAddress']    
-        client_postcode = request_data['clientPostcode']
-        client_email = request_data['clientEmail']
-        client_phone = request_data['clientPhone']
-        description = request_data['description']
-        print(request_data)
-        if not invoice_number:
-            flash('Title is required!')
-        elif not invoice_date:
-            flash('Content is required!')
-        else:
-            conn = get_db_connection()
-            conn.execute('INSERT INTO invoices (invoice_number, invoice_date, invoice_due_date, client_name, client_address, client_postcode, client_email, client_phone, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? )',
-                         (invoice_number, invoice_date, invoice_due_date, client_name, client_address, client_postcode, client_email, client_phone, description))
-            conn.commit()
-            conn.close()
-
-        print(invoice_date)
-        return jsonify(request_data)    
-    return render_template("index.html")
-
-
-
-
-
 
 if __name__ == '__main__':
-     app.run(debug=True) # Set debug=False in production
+    app.run(debug=True) # Set debug=False in production
