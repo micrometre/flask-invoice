@@ -39,17 +39,8 @@ def get_db_connection():
 @app.route('/', methods=['POST'])
 def save_invoice():
     data = request.get_json()
-    items_json = json.dumps(data['invoiceItems'])
-    invoice_date = data['invoiceDate']
-    invoice_due_date = data['fromDate']
-    client_name = data['clientName']
-    client_address = data['clientAddress']    
-    client_postcode = data['clientPostcode']
-    client_email = data['clientEmail']
-    client_phone = data['clientPhone']
-    description = data['description']
-    invoice_number = data['invoiceNumber']
     grand_total = float(data['grandTotal'])
+    items_json = json.dumps(data['invoiceItems'])
 
     print(items_json)
 
@@ -58,9 +49,9 @@ def save_invoice():
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute('''
-            INSERT INTO invoices (invoice_number, invoice_date, invoice_due_date, client_name, client_address, client_postcode, client_email, client_phone, description, items, grand_total)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
-        ''', ( invoice_number, invoice_date, invoice_due_date, client_name, client_address, client_postcode, client_email, client_phone, description, items_json, grand_total))
+            INSERT INTO invoices (items, grand_total)
+            VALUES (?, ?)
+        ''', (items_json, grand_total))
         conn.commit()
 
         # Get the ID of the newly created invoice
@@ -84,11 +75,9 @@ def get_invoices():
     # Convert items from JSON string to Python list
     result = []
     for invoice in invoices:
-        print(invoice)
         result.append({
             'id': invoice['id'],
             'items': json.loads(invoice['items']),
-            'invoiceNumber': invoice['invoice_number'],
             'grandTotal': invoice['grand_total']
         })
 
