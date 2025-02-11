@@ -89,6 +89,8 @@ def get_invoices():
             'id': invoice['id'],
             'items': json.loads(invoice['items']),
             'invoiceNumber': invoice['invoice_number'],
+            'invoiceDate': invoice['invoice_date'],
+            'invoiceDueDate': invoice['invoice_due_date'],
             'grandTotal': invoice['grand_total']
         })
 
