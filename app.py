@@ -91,10 +91,37 @@ def get_invoices():
             'invoiceNumber': invoice['invoice_number'],
             'invoiceDate': invoice['invoice_date'],
             'invoiceDueDate': invoice['invoice_due_date'],
-            'grandTotal': invoice['grand_total']
+            'clientName' : invoice['client_name'],
+            'client_address' : invoice['client_address'],
+            'clientPostcode' : invoice['client_postcode'],
+            'clientEmail': invoice['client_email'],
+            'clientPhone' : invoice['client_phone'],
+            'description' : invoice['description'],
+            'grandTotal': invoice['grand_total'],
         })
 
     return jsonify(result)
+
+
+
+# Fetch a specific invoice by ID
+@app.route('/invoices/<int:invoice_id>', methods=['GET'])
+def get_invoice(invoice_id):
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM invoices WHERE id = ?', (invoice_id,))
+        invoice = cursor.fetchone()
+
+    if not invoice:
+        abort(404, description="Invoice not found")
+
+    # Convert items from JSON string to Python list
+    return jsonify({
+        'id': invoice['id'],
+        'items': json.loads(invoice['items']),
+        'grandTotal': invoice['grand_total']
+    })
+
 
 
 

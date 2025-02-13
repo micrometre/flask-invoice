@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { generatePDF } from '../utils/Pdf';
+import "../App.css";
+import profileImg from "../assets/images/logo.avif";
+
 
 const InvoiceList = () => {
   const [invoices, setInvoices] = useState([]);
@@ -66,6 +70,7 @@ const InvoiceList = () => {
                 >
                   View
                 </button>
+
               </td>
             </tr>
           ))}
@@ -74,5 +79,7 @@ const InvoiceList = () => {
     </div>
   );
 };
+
+
 
 export default InvoiceList;
