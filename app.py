@@ -88,7 +88,7 @@ def get_invoices():
             'invoiceDate': invoice['invoice_date'],
             'invoiceDueDate': invoice['invoice_due_date'],
             'clientName' : invoice['client_name'],
-            'client_address' : invoice['client_address'],
+            'clientAddress' : invoice['client_address'],
             'clientPostcode' : invoice['client_postcode'],
             'clientEmail': invoice['client_email'],
             'clientPhone' : invoice['client_phone'],
@@ -114,15 +114,18 @@ def update_invoice(invoice_id):
     items_json = json.dumps(data['items'])
     grand_total = float(data['grandTotal'])
     invoice_number = data['invoiceNumber']
-    print(invoice_number)
+    invoice_date = data['invoiceDate']
+    invoice_due_date = data['invoiceDueDate']
+    client_name = data['clientName']
+
 
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute('''
             UPDATE invoices
-            SET   invoice_number = ?, items = ?, grand_total = ?
+            SET   invoice_number = ?, invoice_date = ?, invoice_due_date = ?, client_name = ?, items = ?, grand_total = ?
             WHERE id = ?
-        ''', (invoice_number, items_json, grand_total, invoice_id))
+        ''', (invoice_number, invoice_date, invoice_due_date, client_name,  items_json, grand_total, invoice_id))
         conn.commit()
 
         if cursor.rowcount == 0:
@@ -130,8 +133,11 @@ def update_invoice(invoice_id):
 
     # Return the updated invoice
     return jsonify({
-        'invoice_number': invoice_number,
         'id': invoice_id,
+        'invoice_number': invoice_number,
+        'invoice_date': invoice_date,
+        'invoice_due_date': invoice_due_date,
+        'client_name' : client_name,
         'items': data['items'],
         'grandTotal': grand_total,
     })

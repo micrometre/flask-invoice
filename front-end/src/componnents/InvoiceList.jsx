@@ -22,6 +22,7 @@ const InvoiceList = () => {
         }
         const data = await response.json();
         setInvoices(data);
+        console.log(data)
         navigate('/invoices');
 
       } catch (error) {
