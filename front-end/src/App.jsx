@@ -1,18 +1,15 @@
-import { useState } from 'react'
-import InvoiceForm from './componnents/InvoiceForm'
-import InvoiceList from './componnents/InvoiceList'
-import Card from './componnents/Card'
-import { generatePDF } from './utils/Pdf'
-
-
-
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import InvoiceList from './componnents/InvoiceList';
+import EditInvoice from './componnents/EditInvoice';
 function App() {
-
   return (
-    <>
-          <InvoiceList />
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/invoices" element={<InvoiceList />} />
+        <Route path="/invoices/:invoiceId/edit" element={<EditInvoice />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;

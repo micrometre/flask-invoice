@@ -51,9 +51,6 @@ def save_invoice():
     invoice_number = data['invoiceNumber']
     grand_total = float(data['grandTotal'])
 
-    print(items_json)
-
-
     # Insert into the database
     with get_db() as conn:
         cursor = conn.cursor()
@@ -84,7 +81,6 @@ def get_invoices():
     # Convert items from JSON string to Python list
     result = []
     for invoice in invoices:
-        print(invoice)
         result.append({
             'id': invoice['id'],
             'items': json.loads(invoice['items']),
@@ -104,6 +100,43 @@ def get_invoices():
 
 
 
+
+
+
+# Update an invoice by ID
+@app.route('/invoices/<int:invoice_id>', methods=['PUT'])
+def update_invoice(invoice_id):
+    data = request.get_json()
+    print(data)
+    if not  data:
+        abort(400, description="Invalid invoice data")
+    # Convert items to JSON string
+    items_json = json.dumps(data['items'])
+    grand_total = float(data['grandTotal'])
+    invoice_number = data['invoiceNumber']
+    print(invoice_number)
+
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            UPDATE invoices
+            SET   invoice_number = ?, items = ?, grand_total = ?
+            WHERE id = ?
+        ''', (invoice_number, items_json, grand_total, invoice_id))
+        conn.commit()
+
+        if cursor.rowcount == 0:
+            abort(404, description="Invoice not found")
+
+    # Return the updated invoice
+    return jsonify({
+        'invoice_number': invoice_number,
+        'id': invoice_id,
+        'items': data['items'],
+        'grandTotal': grand_total,
+    })
+
+
 # Fetch a specific invoice by ID
 @app.route('/invoices/<int:invoice_id>', methods=['GET'])
 def get_invoice(invoice_id):
@@ -118,9 +151,20 @@ def get_invoice(invoice_id):
     # Convert items from JSON string to Python list
     return jsonify({
         'id': invoice['id'],
+        'invoiceNumber': invoice['invoice_number'],
+        'invoiceDate': invoice['invoice_date'],
+        'invoiceDueDate': invoice['invoice_due_date'],
+        'clientName' : invoice['client_name'],
+        'client_address' : invoice['client_address'],
+        'clientPostcode' : invoice['client_postcode'],
+        'clientEmail': invoice['client_email'],
+        'clientPhone' : invoice['client_phone'],
+        'description' : invoice['description'],
         'items': json.loads(invoice['items']),
-        'grandTotal': invoice['grand_total']
+        'grandTotal': invoice['grand_total'],
     })
+
+
 
 
 
@@ -131,6 +175,9 @@ def invoce_items():
         request_data = request.get_json()
         return jsonify(request_data)    
     return render_template("index.html")
+
+init_db()
+
 
 if __name__ == '__main__':
     app.run(debug=True) # Set debug=False in production

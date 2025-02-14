@@ -3,11 +3,14 @@ import { generatePDF } from '../utils/Pdf';
 import "../App.css";
 import profileImg from "../assets/images/logo.avif";
 
+import { useParams, useNavigate } from 'react-router-dom';
 
 const InvoiceList = () => {
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
 
   // Fetch invoices from the Flask back-end
   useEffect(() => {
@@ -19,6 +22,8 @@ const InvoiceList = () => {
         }
         const data = await response.json();
         setInvoices(data);
+        navigate('/invoices');
+
       } catch (error) {
         setError(error.message);
       } finally {
@@ -64,11 +69,12 @@ const InvoiceList = () => {
               <td>{invoice.clientPhone}</td>
               <td>${invoice.grandTotal.toFixed(2)}</td>
               <td>
+
                 <button
-                  className="btn btn-primary btn-sm"
-                  onClick={() => alert(`View details for invoice ${invoice.id}`)}
+                  className="btn btn-warning btn-sm"
+                  onClick={() => navigate(`/invoices/${invoice.id}/edit`)}
                 >
-                  View
+                  Edit
                 </button>
 
               </td>
