@@ -50,6 +50,7 @@ def save_invoice():
     description = data['description']
     invoice_number = data['invoiceNumber']
     grand_total = float(data['grandTotal'])
+    print(data)
 
     # Insert into the database
     with get_db() as conn:

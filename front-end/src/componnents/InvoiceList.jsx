@@ -44,30 +44,23 @@ const InvoiceList = () => {
   }
 
   return (
-    <div>
+    <div className="w-full mx-auto p-6 bg-white rounded-md shadow-md">
+
       <h2>Invoice List</h2>
-      <table className="table">
+      <table className="table px-4 min-w-full rounded-md border border-gray-200 overflow-hidden ">
         <thead>
           <tr>
-            <th>Invoice Number</th>
-            <th>Invoice Date</th>
-            <th>Due Date</th>
             <th>Client Name</th>
-            <th>Client Email</th>
-            <th>Client Phone</th>
-            <th>Grand Total</th>
+            <th>Client Post Code</th>
+            <th>Total</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {invoices.map((invoice) => (
             <tr key={invoice.id}>
-              <td>{invoice.invoiceNumber}</td>
-              <td>{invoice.invoiceDate}</td>
-              <td>{invoice.invoiceDueDate}</td>
               <td>{invoice.clientName}</td>
-              <td>{invoice.clientEmail}</td>
-              <td>{invoice.clientPhone}</td>
+              <td>{invoice.clientPostcode}</td>
               <td>${invoice.grandTotal.toFixed(2)}</td>
               <td>
 

@@ -98,15 +98,16 @@ const EditInvoice = () => {
   }
 
   return (
-    <div>
+    <div className="mx-auto p-6 bg-sky-100 rounded-md shadow-md">
       <h2>Edit Invoice</h2>
-      <form onSubmit={handleSubmit}>
-        <table className="table px-4 min-w-full rounded-md border border-gray-200 overflow-hidden">
-          <thead>
+      <form onSubmit={handleSubmit} className="w-full border-sky-600 bg-red-100">
+
+        <table className="table px-4 w-full rounded-md border border-gray-200 ">
+
+          <thead className="bg-gray-100 ">
             <tr>
-              <th>Invoice Number</th>
-              <th>Invoice Date</th>
-              <th>Due Date</th>
+              <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Invoice Number</th>
+              <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Invoice Date</th>
             </tr>
           </thead>
           <tbody>
@@ -114,6 +115,7 @@ const EditInvoice = () => {
               <td>
                 <input
                   type="text"
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline `}
                   value={invoice.invoiceNumber}
                   onChange={(e) => handleFieldChange('invoiceNumber', e.target.value)}
                 />
@@ -121,58 +123,43 @@ const EditInvoice = () => {
               <td>
                 <input
                   type="text"
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline `}
                   value={invoice.invoiceDate}
                   onChange={(e) => handleFieldChange('invoiceDate', e.target.value)}
                 />
               </td>
-              <td>
-                <input
-                  type="text"
-                  value={invoice.invoiceDueDate}
-                  onChange={(e) => handleFieldChange('invoiceDueDate', e.target.value)}
-                />
-              </td>
             </tr>
           </tbody>
-
-          <thead>
+          <thead className="bg-gray-100 ">
             <tr>
-              <th>Client Name</th>
-              <th>Client Address</th>
-              <th>Client Postcode</th>
+              <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Due Date</th>
+              <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Client Name</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
                 <input
+                  type="text"
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline `}
+                  value={invoice.invoiceDueDate}
+                  onChange={(e) => handleFieldChange('invoiceDueDate', e.target.value)}
+                />
+              </td>
+              <td>
+                <input
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline `}
                   type="text"
                   value={invoice.clientName}
                   onChange={(e) => handleFieldChange('clientName', e.target.value)}
                 />
               </td>
-              <td>
-                <input
-                  type="text"
-                  value={invoice.clientAddress}
-                  onChange={(e) => handleFieldChange('clientAddress', e.target.value)}
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  value={invoice.clientPostcode}
-                  onChange={(e) => handleFieldChange('clientPostcode', e.target.value)}
-                />
-              </td>
             </tr>
           </tbody>
-
-          <thead>
+          <thead className="bg-gray-100 ">
             <tr>
-              <th>Client Email</th>
-              <th>Client Phone</th>
-              <th>Description</th>
+              <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Client Postcode</th>
+              <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Description</th>
             </tr>
           </thead>
           <tbody>
@@ -180,66 +167,70 @@ const EditInvoice = () => {
               <td>
                 <input
                   type="text"
-                  value={invoice.clientEmail}
-                  onChange={(e) => handleFieldChange('clientEmail', e.target.value)}
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline `}
+                  value={invoice.clientPostcode}
+                  onChange={(e) => handleFieldChange('clientPostcode', e.target.value)}
                 />
               </td>
+
               <td>
                 <input
                   type="text"
-                  value={invoice.clientPhone}
-                  onChange={(e) => handleFieldChange('clientPhone', e.target.value)}
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline `}
                   value={invoice.description}
                   onChange={(e) => handleFieldChange('description', e.target.value)}
                 />
               </td>
             </tr>
           </tbody>
-
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Quantity</th>
-              <th>Price</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {invoice.items.map((item, index) => (
-              <tr key={index}>
-                <td>
-                  <input
-                    type="text"
-                    value={item.item}
-                    onChange={(e) => handleItemChange(index, 'item', e.target.value)}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    value={item.quantity}
-                    onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
-                    min="1"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    value={item.price}
-                    onChange={(e) => handleItemChange(index, 'price', e.target.value)}
-                    step="0.01"
-                  />
-                </td>
-                <td>{(item.quantity * item.price).toFixed(2)}</td>
-              </tr>
-            ))}
-          </tbody>
         </table>
+        <div className=" w-full">
+          <table className="table px-4 min-w-full rounded-md border border-gray-200 overflow-hidden ">
+            <thead className="bg-gray-100 ">
+              <tr>
+                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Items</th>
+                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Qty</th>
+                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Price</th>
+                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              {invoice.items.map((item, index) => (
+                <tr key={index}>
+                  <td>
+                    <input
+                      type="text"
+                      className="w-20 border p-2"
+                      value={item.item}
+                      onChange={(e) => handleItemChange(index, 'item', e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      className="w-20 border p-2"
+                      value={item.quantity}
+                      onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+                      min="1"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      className="w-20 border p-2"
+                      value={item.price}
+                      onChange={(e) => handleItemChange(index, 'price', e.target.value)}
+                      step="0.01"
+                    />
+                  </td>
+                  <td>{(item.quantity * item.price).toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
 
         <div className="grid grid-cols-3 gap-4 w-full">
           <div className="mb-4">
