@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { convertToDateString, getDate } from './convertToDateString';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const InvoiceItem = ({ index, onRemoveItem, value, onChange }) => {
   const { item, quantity, price } = value;
+
 
   const handleInputChange = (event) => {
     const { name, value: inputValue } = event.target;
@@ -14,7 +16,7 @@ const InvoiceItem = ({ index, onRemoveItem, value, onChange }) => {
       <td>
         <input
           type="text"
-          className="w-20 border p-2"
+          className="w-25 border "
           name="item"
           value={item}
           onChange={handleInputChange}
@@ -24,7 +26,7 @@ const InvoiceItem = ({ index, onRemoveItem, value, onChange }) => {
       <td>
         <input
           type="number"
-          className="w-10 border p-2"
+          className="w-20 border p-2"
           name="quantity"
           value={quantity}
           onChange={handleInputChange}
@@ -34,7 +36,7 @@ const InvoiceItem = ({ index, onRemoveItem, value, onChange }) => {
       <td>
         <input
           type="number"
-          className="w-10 border p-2"
+          className="w-20 border "
           name="price"
           value={price}
           onChange={handleInputChange}
@@ -69,6 +71,7 @@ const InvoiceForm = () => {
   const [description, setDescription] = useState('')
   const [errors, setErrors] = useState({});
   const [submissionStatus, setSubmissionStatus] = useState(null);
+  const navigate = useNavigate();
 
 
   const handleAddItem = () => {
@@ -96,7 +99,7 @@ const InvoiceForm = () => {
     event.preventDefault();
     setSubmissionStatus('pending'); // Indicate submission is in progress
     try {
-      const response = await fetch('http://127.0.0.1:5000', { // Replace with your API endpoint
+      const response = await fetch('http://192.168.1.130:5000', { // Replace with your API endpoint
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -135,6 +138,8 @@ const InvoiceForm = () => {
       setClientEmail('');
       setDescription('');
 
+      navigate('/invoices');
+
 
     } catch (error) {
       console.error('Submission error:', error);
@@ -152,24 +157,8 @@ const InvoiceForm = () => {
   return (
     <div>
       <h2>Invoice</h2>
-
-
-      <div className="d mx-auto p-6 bg-white rounded-md shadow-md">
+      <div className=" mx-auto p-6 bg-white rounded-md shadow-md">
         <h2 className="text-xl font-bold mb-6 text-gray-800">Create Invoice</h2>
-        {submissionStatus === 'success' && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-            <strong className="font-bold">Success!</strong>
-            <span className="block sm:inline"> Thank you for your message.</span>
-          </div>
-        )}
-        {submissionStatus === 'error' && errors.submit && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-            <strong className="font-bold">Error!</strong>
-            <span className="block sm:inline"> {errors.submit}</span>
-          </div>
-        )}
-
-
         <form onSubmit={handleSubmit} className="w-full border-sky-600 bg-red-100">
           <div className="grid grid-cols-2 gap-4 w-full">
             <div className="mb-4">
@@ -312,6 +301,7 @@ const InvoiceForm = () => {
                   ))}
                 </tbody>
               </table>
+
             </div>
             <div className="grid grid-cols-3 gap-4 w-full">
               <div className="mb-4">
@@ -323,10 +313,14 @@ const InvoiceForm = () => {
                   {submissionStatus === 'pending' ? 'Submitting...' : 'Submit'}
                 </button>
               </div>
-              <h3>Grand Total: ${calculateGrandTotal()}</h3>
             </div>
           </div>
         </form>
+        <div className="text-right mb-8">
+          <div className="flex justify-end">
+            <span className="font-semibold mr-4">Grand Total: £{calculateGrandTotal()}</span>
+          </div>
+        </div>
         <div className="flex items-center justify-between">
           <button
             className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

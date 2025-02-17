@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { generatePDF } from '../utils/Pdf';
 import "../App.css";
-import profileImg from "../assets/images/logo.avif";
 
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -16,7 +14,7 @@ const InvoiceList = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const response = await fetch('http://localhost:5000/');
+        const response = await fetch('http://192.168.1.130:5000');
         if (!response.ok) {
           throw new Error('Failed to fetch invoices');
         }

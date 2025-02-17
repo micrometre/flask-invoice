@@ -40,7 +40,7 @@ const ContactSection = () => {
     event.preventDefault();
     setSubmissionStatus('pending'); // Indicate submission is in progress
     try {
-      const response = await fetch('http://127.0.0.1:5000', { // Replace with your API endpoint
+      const response = await fetch('http://192.168.1.130:5000', { // Replace with your API endpoint
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

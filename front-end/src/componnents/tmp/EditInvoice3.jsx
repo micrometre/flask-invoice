@@ -2,9 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import jsPDF from 'jspdf';
 import LogoImg from '/images/logo.jpg'
-import InvoiceDeleter from './InvoiceDeleter';
-
-
+import BottomNavbar from './BottomNavbar';
 const EditInvoice = () => {
   const reportRef = useRef(null);
   const { invoiceId } = useParams(); // Get the invoice ID from the URL
@@ -82,26 +80,12 @@ const EditInvoice = () => {
     }, 0).toFixed(2);
   };
 
-
-  const handleDeleteSuccess = (message, invoiceId) => {
-    console.log(message); // "Invoice deleted successfully"
-    //setInvoice(invoice.filter((invoice) => invoice.id !== invoiceId)); // Update state
-    alert(`Invoice ${invoiceId} deleted!`);
-    navigate('/invoices');
-
-  };
-
-  const handleDeleteFailure = (errorMessage, invoiceId) => {
-    console.error(`Error deleting invoice ${invoiceId}:`, errorMessage);
-    alert(`Error deleting invoice ${invoiceId}: ${errorMessage}`);
-  };
-
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`http://192.168.1.130:5000/invoices/${invoiceId}`, {
+      const response = await fetch(`http://localhost:5000/invoices/${invoiceId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -141,9 +125,9 @@ const EditInvoice = () => {
   }
 
   return (
-    <div className="w-full p-6 bg-sky-800 rounded-md shadow-md">
+    <div className="mx-auto p-6 bg-sky-100 rounded-md shadow-md">
       <h2>Edit Invoice</h2>
-      <form onSubmit={handleSubmit} className=" border-sky-600 bg-red-100">
+      <form onSubmit={handleSubmit} className="w-full border-sky-600 bg-red-100">
 
         <table className="table px-4 w-full rounded-md border border-gray-200 ">
 
@@ -237,7 +221,46 @@ const EditInvoice = () => {
                 <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Total</th>
               </tr>
             </thead>
+            <tbody>
+
+              {invoice.items.map((item, index) => (
+                <tr key={index}>
+                  <td>
+                    <input
+                      type="text"
+                      className="w-20 border p-2"
+                      value={item.item}
+                      onChange={(e) => handleItemChange(index, 'item', e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      className="w-20 border p-2"
+                      value={item.quantity}
+                      onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+                      min="1"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      className="w-20 border p-2"
+                      value={item.price}
+                      onChange={(e) => handleItemChange(index, 'price', e.target.value)}
+                      step="0.01"
+                    />
+                  </td>
+                  <td>{(item.quantity * item.price).toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
+        </div>
+        <div className="text-right mb-8">
+          <div className="flex justify-end">
+            <span className="font-semibold mr-4">Grand Total: £{calculateGrandTotal()}</span>
+          </div>
         </div>
 
 
@@ -320,38 +343,25 @@ const EditInvoice = () => {
                   <span className="font-semibold mr-4">Grand Total: £{calculateGrandTotal()}</span>
                 </div>
               </div>
-              <div>
-                <h1>Invoices</h1>
-                <ul>
-                  <li key={invoice.id}>
-                    {invoice.className}
-                    <InvoiceDeleter
-                      invoiceId={invoice.id}
-                      onDeleteSuccess={handleDeleteSuccess}
-                      onDeleteFailure={handleDeleteFailure}
-                    />
-                  </li>
-                </ul>
-              </div>
             </div>
           </div>
         </div>
+
         <div className="grid grid-cols-3 gap-4 w-full">
           <div className="mb-4">
-            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            <button type="submit" className="btn btn-primary">
               Save Changes
             </button>
           </div>
         </div>
         <div className="grid grid-cols-3 gap-4 w-full">
-          <div className="flex justify-end">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              onClick={generatePdf}>Generate PDF</button>
+          <div className="mb-4">
+            <button onClick={generatePdf}>Generate PDF</button>
           </div>
         </div>
-      </form >
-
-    </div >
+      </form>
+      <BottomNavbar />
+    </div>
   );
 };
 

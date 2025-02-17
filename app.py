@@ -175,6 +175,20 @@ def get_invoice(invoice_id):
 
 
 
+# Delete an invoice by ID
+@app.route('/invoices/<int:invoice_id>', methods=['DELETE'])
+def delete_invoice(invoice_id):
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM invoices WHERE id = ?', (invoice_id,))
+        conn.commit()
+
+    if cursor.rowcount == 0:
+        abort(404, description="Invoice not found")
+
+    return jsonify({'message': 'Invoice deleted successfully'}), 200
+
+
 
 @app.route("/a", methods=("GET", "POST"))
 def invoce_items():
