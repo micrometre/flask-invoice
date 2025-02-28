@@ -40,7 +40,7 @@ function InvoiceDeleter({ invoiceId, onDeleteSuccess, onDeleteFailure }) {
 
   return (
     <div>
-      <button onClick={handleDelete} disabled={isDeleting}>
+      <button onClick={handleDelete} disabled={isDeleting} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"> 
         {isDeleting ? 'Deleting...' : 'Delete Invoice'}
       </button>
       {error && <p style={{ color: 'red' }}>{error}</p>}

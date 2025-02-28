@@ -229,74 +229,77 @@ const EditInvoice = () => {
           </tbody>
         </table>
         <div className=" w-full">
-
-          <div className="container m-1 grid grid-cols-4 grid-rows-1 gap-4 md:grid-cols-4 lg:grid-cols-4" >
-            <div className="tile bg-lime-600 lg:col-span-1 lg:col-start-1">
-              <h1 className="tile-marker">Items</h1>
-            </div>
-            <div className="tile bg-green-600">
-              <h1 className="tile-marker">Qty</h1>
-            </div>
-            <div className="tile bg-emerald-500">
-              <h1 className="tile-marker">Price</h1>
-            </div>
-            <div className="tile bg-teal-500">
-              <h1 className="tile-marker">Total</h1>
-            </div>
-          </div>
+          <table className="table px-4 min-w-full rounded-md border border-gray-200 overflow-hidden ">
+            <thead className="bg-gray-100 ">
+              <tr>
+                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Items</th>
+                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Qty</th>
+                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Price</th>
+                <th className="py-3 px-4 text-left text-sm font-medium uppercase tracking-wide" scope="col">Total</th>
+              </tr>
+            </thead>
+          </table>
         </div>
         <div className="border-4 border-blue-600  justify-between items-start mb-8">
           <div className="border-4 border-green-600   bg-white shadow-lg rounded-md">
-            <div className="table px-4 min-w-full rounded-md border border-gray-200 overflow-hidden ">
-              {invoice.items.map((item, index) => (
-                <div key={index}
-                  className="container m-1 grid grid-cols-4 grid-rows-1 gap-4 md:grid-cols-4 lg:grid-cols-4"
-                >
-                  <div>
-                    <input
-                      type="text"
-                      className="w-20 border p-2"
-                      value={item.item}
-                      onChange={(e) => handleItemChange(index, 'item', e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="number"
-                      className="w-20 border p-2"
-                      value={item.quantity}
-                      onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
-                      min="1"
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="number"
-                      className="w-20 border p-2"
-                      value={item.price}
-                      onChange={(e) => handleItemChange(index, 'price', e.target.value)}
-                      step="0.01"
-                    />
-                  </div>
-                  <div>{(item.quantity * item.price).toFixed(2)}</div>
-                </div>
-              ))}
-            </div>
+            <table className="table px-4 min-w-full rounded-md border border-gray-200 overflow-hidden ">
+              <thead className="bg-gray-100 ">
+                <tr className="bg-gray-100">
+                  <th className="py-3 px-4 text-left text-sm  uppercase tracking-wide" scope="col">Items</th>
+                  <th className="py-3 px-4 text-left text-sm  uppercase tracking-wide" scope="col">Qty</th>
+                  <th className="py-3 px-4 text-left text-sm  uppercase tracking-wide" scope="col">Price</th>
+                  <th className="py-3 px-4 text-left text-sm  uppercase tracking-wide" scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {invoice.items.map((item, index) => (
+                  <tr key={index}>
+                    <td>
+                      <input
+                        type="text"
+                        className="w-20 border p-2"
+                        value={item.item}
+                        onChange={(e) => handleItemChange(index, 'item', e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        className="w-20 border p-2"
+                        value={item.quantity}
+                        onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+                        min="1"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        className="w-20 border p-2"
+                        value={item.price}
+                        onChange={(e) => handleItemChange(index, 'price', e.target.value)}
+                        step="0.01"
+                      />
+                    </td>
+                    <td>{(item.quantity * item.price).toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
             <div className="text-right mb-8">
               <div className="flex justify-end">
                 <span className="font-semibold mr-4">Grand Total: £{calculateGrandTotal()}</span>
               </div>
             </div>
             <div>
+              <h1>Invoices</h1>
               <ul>
                 <li key={invoice.id}>
                   {invoice.className}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    <InvoiceDeleter
-                      invoiceId={invoice.id}
-                      onDeleteSuccess={handleDeleteSuccess}
-                      onDeleteFailure={handleDeleteFailure}
-                    />
+                  <InvoiceDeleter
+                    invoiceId={invoice.id}
+                    onDeleteSuccess={handleDeleteSuccess}
+                    onDeleteFailure={handleDeleteFailure}
+                  />
                 </li>
               </ul>
             </div>
@@ -310,6 +313,20 @@ const EditInvoice = () => {
           </div>
         </div>
         <div ref={reportRef}>
+          <div className="container m-auto grid grid-cols-4 grid-rows-5 gap-4 md:grid-cols-4 lg:grid-cols-4" >
+            <div className="tile bg-lime-600 lg:col-span-1 lg:col-start-1">
+              <h1 className="tile-marker">FOUR</h1>
+            </div>
+            <div className="tile bg-green-600">
+              <h1 className="tile-marker">FIVE</h1>
+            </div>
+            <div className="tile bg-emerald-500">
+              <h1 className="tile-marker">SIX</h1>
+            </div>
+            <div className="tile bg-teal-500">
+              <h1 className="tile-marker">SEVEN</h1>
+            </div>
+          </div>
           <div className="border-4 border-green-600  bg-gray-50 ">
             <div className="px-5  rounded-md">
               <div className="flex justify-between items-start mb-8">
@@ -328,9 +345,6 @@ const EditInvoice = () => {
                 </div>
               </div>
             </div>
-
-
-            
             <div className="px-5 py-2  flex flex-col ">
               <h2 className="text-xl font-semibold text-gray-700 mb-2">Bill To:</h2>
               <p className="text-gray-600">{invoice.clientName}</p>
@@ -338,20 +352,16 @@ const EditInvoice = () => {
               <p className="text-gray-600">{invoice.clientPostcode}</p>
               <p className="text-gray-600">{invoice.clientPhone}</p>
             </div>
-            <div className="container m-1 grid grid-cols-4 grid-rows-1 gap-4 md:grid-cols-4 lg:grid-cols-4" >
-            <div className="tile bg-lime-600 lg:col-span-1 lg:col-start-1">
-              <h1 className="tile-marker">Items</h1>
-            </div>
-            <div className="tile bg-green-600">
-              <h1 className="tile-marker">Qty</h1>
-            </div>
-            <div className="tile bg-emerald-500">
-              <h1 className="tile-marker">Price</h1>
-            </div>
-            <div className="tile bg-teal-500">
-              <h1 className="tile-marker">Total</h1>
-            </div>
-          </div>
+            <table className="table px-4 min-w-full rounded-md border border-gray-200 overflow-hidden ">
+              <thead className="bg-gray-100 ">
+                <tr className="bg-gray-100">
+                  <th className="py-3 px-4 text-left text-sm  uppercase tracking-wide" scope="col">Items</th>
+                  <th className="py-3 px-4 text-left text-sm  uppercase tracking-wide" scope="col">Qty</th>
+                  <th className="py-3 px-4 text-left text-sm  uppercase tracking-wide" scope="col">Price</th>
+                  <th className="py-3 px-4 text-left text-sm  uppercase tracking-wide" scope="col">Total</th>
+                </tr>
+              </thead>
+            </table>
 
             {invoice.items.map((item, index) => (
               <div key={{ index }} className="border-4 border-blue-600   grid gap-4  lg:grid-cols-4 lg:grid-rows-2">
