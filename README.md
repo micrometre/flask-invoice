@@ -1,5 +1,6 @@
-# Flask Invoice API
+# Flask Invoice API with React Frontend
 
+## Introduction
 This is a RESTful API built with Flask for managing invoices. It allows you to create, retrieve, update, and delete invoices. The application uses an SQLite database to store invoice data and provides endpoints to interact with this data.
 
 ## Features
@@ -14,7 +15,8 @@ This is a RESTful API built with Flask for managing invoices. It allows you to c
 -   **Flask:** A micro web framework for Python.
 -   **SQLite:** A lightweight, file-based database.
 -   **Flask-CORS:** A Flask extension for handling Cross-Origin Resource Sharing (CORS).
-- **JSON:** A standard format for representing data.
+- **React:** A popular JavaScript library for building user interfaces.
+
 
 ## Setup and Installation
 
