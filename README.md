@@ -104,7 +104,7 @@ This is a RESTful API built with Flask for managing invoices. It allows you to c
 ```
 
 
-- Response Codes:
+- Response Codes
     - 201: Created Successfully
     - 400: Bad Request (if there is a problem in request body)
 #### Get All Invoices (GET /)
