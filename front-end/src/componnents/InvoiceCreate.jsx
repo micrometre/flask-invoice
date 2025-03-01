@@ -58,7 +58,7 @@ const InvoiceItem = ({ index, onRemoveItem, value, onChange }) => {
   );
 };
 
-const InvoiceForm = () => {
+const InvoiceCreate = () => {
   const [invoiceItems, setInvoiceItems] = useState([]);
   const [invoiceNumber, setInvoIceNumber] = useState(convertToDateString());
   const [invoiceDate, setInvoiceDate] = useState(getDate());
@@ -273,10 +273,6 @@ const InvoiceForm = () => {
 
 
 
-
-
-
-
           <div className="bg-white"> {/* Container */}
             <div className=" w-full">
               <table className="table px-4 min-w-full rounded-md border border-gray-200 overflow-hidden ">
@@ -334,4 +330,4 @@ const InvoiceForm = () => {
   );
 };
 
-export default InvoiceForm;
+export default InvoiceCreate;
