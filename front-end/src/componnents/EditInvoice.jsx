@@ -129,7 +129,7 @@ const EditInvoice = () => {
   }
 
   return (
-    <div className="w-full p-6 bg-sky-800 rounded-md shadow-md">
+    <div className="w-full p-6 bg-sky-100 rounded-md shadow-md">
       <h2>Edit Invoice</h2>
       <EditInvoiceForm
         invoice={invoice}

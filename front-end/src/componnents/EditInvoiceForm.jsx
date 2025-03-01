@@ -1,6 +1,6 @@
 import React from 'react';
 import InvoiceDeleter from './InvoiceDeleter';
-
+import BottomNavbar from './BottomNavbar';
 const EditInvoiceForm = ({
   invoice,
   handleFieldChange,
@@ -11,6 +11,7 @@ const EditInvoiceForm = ({
   handleDeleteFailure,
 }) => {
   return (
+    <>
     <form onSubmit={handleSubmit} className="border-sky-600 bg-red-100">
       <table className="table px-4 w-full rounded-md border border-gray-200">
         <thead className="bg-gray-100">
@@ -170,6 +171,7 @@ const EditInvoiceForm = ({
         </div>
       </div>
     </form>
+    </>
   );
 };
 

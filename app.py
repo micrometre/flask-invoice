@@ -71,11 +71,13 @@ def save_invoice():
     }), 201
 
 
+
 @app.route('/', methods=['GET'])
 def get_invoices():
     with get_db() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM invoices')
+        # Order by invoice_date in descending order to get the latest invoice first
+        cursor.execute('SELECT * FROM invoices ORDER BY invoice_number DESC')
         invoices = cursor.fetchall()
 
     # Convert items from JSON string to Python list
@@ -97,6 +99,9 @@ def get_invoices():
         })
 
     return jsonify(result)
+
+
+
 
 
 

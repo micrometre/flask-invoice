@@ -7,7 +7,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route  element={<Layout />}>
+          <Route path="/" element={<InvoiceList />} />
           <Route path="/create" element={<InvoiceCreate />} />
           <Route path="/invoices" element={<InvoiceList />} />
           <Route path="/invoices/:invoiceId/edit" element={<EditInvoice />} />
