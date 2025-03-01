@@ -45,25 +45,25 @@ const InvoicePdf = ({ invoice, reportRef, generatePdf }) => {
           <div key={index} className="border-4 border-blue-600 grid gap-4 lg:grid-cols-4 lg:grid-rows-2">
             <input
               type="text"
-              className="w-20 border p-2"
+              className="w-20 border p-2 tile col-span-1 row-start-2 row-end-5 bg-amber-500 md:col-span-2 lg:col-span-3"
               value={item.item}
               onChange={(e) => handleItemChange(index, 'item', e.target.value)}
             />
             <input
               type="number"
-              className="w-20 border p-2"
+              className="w-20 border p-2 tile col-span-1 row-start-2 row-end-5 bg-amber-500 md:col-span-2 lg:col-span-3"
               value={item.quantity}
               onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
               min="1"
             />
             <input
               type="number"
-              className="w-20 border p-2"
+              className="w-20 border p-2 tile col-span-1 row-start-2 row-end-5 bg-amber-500 md:col-span-2 lg:col-span-3"
               value={item.price}
               onChange={(e) => handleItemChange(index, 'price', e.target.value)}
               step="0.01"
             />
-            <div className="border-4 border-lime-300">
+            <div className="border-4 border-lime-300 p-2 tile col-span-1 row-start-2 row-end-5 bg-amber-500 md:col-span-2 lg:col-span-3">
               {(item.quantity * item.price).toFixed(2)}
             </div>
           </div>
